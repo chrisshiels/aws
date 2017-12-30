@@ -222,7 +222,7 @@ resource "aws_instance" "public" {
   vpc_security_group_ids = [ "${aws_security_group.public.id}" ]
   subnet_id = "${aws_subnet.public.id}"
   associate_public_ip_address = true
-  key_name = "terraformaws"
+  key_name = "aws"
   monitoring = false
   user_data = "${data.template_file.user-data.rendered}"
   iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
@@ -284,7 +284,7 @@ resource "aws_instance" "private" {
   vpc_security_group_ids = [ "${aws_security_group.private.id}" ]
   subnet_id = "${aws_subnet.private.id}"
   associate_public_ip_address = false
-  key_name = "terraformaws"
+  key_name = "aws"
   monitoring = false
   user_data = "${data.template_file.user-data.rendered}"
   iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
@@ -432,7 +432,7 @@ resource "aws_launch_configuration" "app" {
   instance_type = "t2.micro"
   security_groups = [ "${aws_security_group.app.id}" ]
   associate_public_ip_address = false
-  key_name = "terraformaws"
+  key_name = "aws"
   enable_monitoring = false
   user_data = "${data.template_file.user-data.rendered}"
   iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
