@@ -127,7 +127,7 @@ data "aws_ami" "centos7" {
 }
 
 
-data "aws_iam_policy_document" "instance" {
+data "aws_iam_policy_document" "assumerole" {
   statement {
     actions = [ "sts:AssumeRole" ]
 
@@ -141,7 +141,7 @@ data "aws_iam_policy_document" "instance" {
 
 resource "aws_iam_role" "instance" {
   name = "role-dev-instance"
-  assume_role_policy = "${data.aws_iam_policy_document.instance.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.assumerole.json}"
 }
 
 
@@ -183,43 +183,43 @@ data "template_file" "user-data" {
 }
 
 
-resource "aws_security_group" "public" {
-  name = "sg_dev_public"
-  description = "public"
+resource "aws_security_group" "bastion" {
+  name = "sg_dev_bastion"
+  description = "bastion"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "sg-dev-public"
+    Name = "sg-dev-bastion"
   }
 }
 
 
-resource "aws_security_group_rule" "public-egress-allall-to-all" {
-  security_group_id = "${aws_security_group.public.id}"
+resource "aws_security_group_rule" "bastion-egress-allall-to-all" {
+  security_group_id = "${aws_security_group.bastion.id}"
   type = "egress"
   protocol = "all"
   from_port = 0
   to_port = 0
   cidr_blocks = [ "0.0.0.0/0" ]
-  description = "public-egress-allall-to-all"
+  description = "bastion-egress-allall-to-all"
 }
 
 
-resource "aws_security_group_rule" "public-ingress-tcpall-from-all" {
-  security_group_id = "${aws_security_group.public.id}"
+resource "aws_security_group_rule" "bastion-ingress-tcp22-from-all" {
+  security_group_id = "${aws_security_group.bastion.id}"
   type = "ingress"
   protocol = "tcp"
-  from_port = 0
-  to_port = 65535
+  from_port = 22
+  to_port = 22
   cidr_blocks = [ "0.0.0.0/0" ]
-  description = "public-ingress-tcpall-from-all"
+  description = "bastion-ingress-tcp22-from-all"
 }
 
 
-resource "aws_instance" "public" {
+resource "aws_instance" "bastion" {
   ami = "${data.aws_ami.centos7.id}"
   instance_type = "t2.micro"
-  vpc_security_group_ids = [ "${aws_security_group.public.id}" ]
+  vpc_security_group_ids = [ "${aws_security_group.bastion.id}" ]
   subnet_id = "${aws_subnet.public.id}"
   associate_public_ip_address = true
   key_name = "aws"
@@ -234,76 +234,14 @@ resource "aws_instance" "public" {
   }
 
   tags {
-    Name = "dev-public"
+    Name = "dev-bastion"
   }
 
   volume_tags {
-    Name = "dev-public"
+    Name = "dev-bastion"
   }
 
   depends_on = [ "aws_internet_gateway.igw" ]
-}
-
-
-resource "aws_security_group" "private" {
-  name = "sg_dev_private"
-  description = "private"
-  vpc_id = "${aws_vpc.vpc.id}"
-
-  tags {
-    Name = "sg-dev-private"
-  }
-}
-
-
-resource "aws_security_group_rule" "private-egress-allall-to-all" {
-  security_group_id = "${aws_security_group.private.id}"
-  type = "egress"
-  protocol = "all"
-  from_port = 0
-  to_port = 0
-  cidr_blocks = [ "0.0.0.0/0" ]
-  description = "private-egress-allall-to-all"
-}
-
-
-resource "aws_security_group_rule" "private-ingress-tcpall-from-public" {
-  security_group_id = "${aws_security_group.private.id}"
-  type = "ingress"
-  protocol = "tcp"
-  from_port = 0
-  to_port = 65535
-  source_security_group_id = "${aws_security_group.public.id}"
-  description = "private-ingress-tcpall-from-public"
-}
-
-
-resource "aws_instance" "private" {
-  ami = "${data.aws_ami.centos7.id}"
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [ "${aws_security_group.private.id}" ]
-  subnet_id = "${aws_subnet.private.id}"
-  associate_public_ip_address = false
-  key_name = "aws"
-  monitoring = false
-  user_data = "${data.template_file.user-data.rendered}"
-  iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
-
-  root_block_device {
-    volume_type = "gp2"
-    volume_size = "8"
-    delete_on_termination = true
-  }
-
-  tags {
-    Name = "dev-private"
-  }
-
-  volume_tags {
-    Name = "dev-private"
-  }
-
-  depends_on = [ "aws_nat_gateway.nat" ]
 }
 
 
@@ -393,25 +331,25 @@ resource "aws_security_group_rule" "app-egress-allall-to-all" {
 }
 
 
-resource "aws_security_group_rule" "app-ingress-tcp22-from-public" {
+resource "aws_security_group_rule" "app-ingress-tcp22-from-bastion" {
   security_group_id = "${aws_security_group.app.id}"
   type = "ingress"
   protocol = "tcp"
   from_port = 22
   to_port = 22
-  source_security_group_id = "${aws_security_group.public.id}"
-  description = "app-ingress-tcp22-from-public"
+  source_security_group_id = "${aws_security_group.bastion.id}"
+  description = "app-ingress-tcp22-from-bastion"
 }
 
 
-resource "aws_security_group_rule" "app-ingress-tcp80-from-public" {
+resource "aws_security_group_rule" "app-ingress-tcp80-from-bastion" {
   security_group_id = "${aws_security_group.app.id}"
   type = "ingress"
   protocol = "tcp"
   from_port = 80
   to_port = 80
-  source_security_group_id = "${aws_security_group.public.id}"
-  description = "app-ingress-tcp80-from-public"
+  source_security_group_id = "${aws_security_group.bastion.id}"
+  description = "app-ingress-tcp80-from-bastion"
 }
 
 
