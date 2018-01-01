@@ -205,14 +205,14 @@ resource "aws_security_group_rule" "bastion-egress-allall-to-all" {
 }
 
 
-resource "aws_security_group_rule" "bastion-ingress-tcpall-from-all" {
+resource "aws_security_group_rule" "bastion-ingress-tcp22-from-all" {
   security_group_id = "${aws_security_group.bastion.id}"
   type = "ingress"
   protocol = "tcp"
-  from_port = 0
-  to_port = 65535
+  from_port = 22
+  to_port = 22
   cidr_blocks = [ "0.0.0.0/0" ]
-  description = "bastion-ingress-tcpall-from-all"
+  description = "bastion-ingress-tcp22-from-all"
 }
 
 
