@@ -127,7 +127,7 @@ data "aws_ami" "centos7" {
 }
 
 
-data "aws_iam_policy_document" "instance" {
+data "aws_iam_policy_document" "assumerole" {
   statement {
     actions = [ "sts:AssumeRole" ]
 
@@ -141,7 +141,7 @@ data "aws_iam_policy_document" "instance" {
 
 resource "aws_iam_role" "instance" {
   name = "role-dev-instance"
-  assume_role_policy = "${data.aws_iam_policy_document.instance.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.assumerole.json}"
 }
 
 
