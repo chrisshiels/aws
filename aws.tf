@@ -245,68 +245,6 @@ resource "aws_instance" "public" {
 }
 
 
-resource "aws_security_group" "private" {
-  name = "sg_dev_private"
-  description = "private"
-  vpc_id = "${aws_vpc.vpc.id}"
-
-  tags {
-    Name = "sg-dev-private"
-  }
-}
-
-
-resource "aws_security_group_rule" "private-egress-allall-to-all" {
-  security_group_id = "${aws_security_group.private.id}"
-  type = "egress"
-  protocol = "all"
-  from_port = 0
-  to_port = 0
-  cidr_blocks = [ "0.0.0.0/0" ]
-  description = "private-egress-allall-to-all"
-}
-
-
-resource "aws_security_group_rule" "private-ingress-tcpall-from-public" {
-  security_group_id = "${aws_security_group.private.id}"
-  type = "ingress"
-  protocol = "tcp"
-  from_port = 0
-  to_port = 65535
-  source_security_group_id = "${aws_security_group.public.id}"
-  description = "private-ingress-tcpall-from-public"
-}
-
-
-resource "aws_instance" "private" {
-  ami = "${data.aws_ami.centos7.id}"
-  instance_type = "t2.micro"
-  vpc_security_group_ids = [ "${aws_security_group.private.id}" ]
-  subnet_id = "${aws_subnet.private.id}"
-  associate_public_ip_address = false
-  key_name = "aws"
-  monitoring = false
-  user_data = "${data.template_file.user-data.rendered}"
-  iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
-
-  root_block_device {
-    volume_type = "gp2"
-    volume_size = "8"
-    delete_on_termination = true
-  }
-
-  tags {
-    Name = "dev-private"
-  }
-
-  volume_tags {
-    Name = "dev-private"
-  }
-
-  depends_on = [ "aws_nat_gateway.nat" ]
-}
-
-
 resource "aws_security_group" "elb" {
   name = "sg_dev_elb"
   description = "elb"
