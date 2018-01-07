@@ -1,7 +1,7 @@
 resource "aws_security_group" "bastion" {
   name = "sg_dev_bastion"
   description = "bastion"
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${var.vpc_id}"
 
   tags {
     Name = "sg-dev-bastion"

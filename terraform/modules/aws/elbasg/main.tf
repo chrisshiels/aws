@@ -1,7 +1,7 @@
 resource "aws_security_group" "elb" {
   name = "sg_dev_elb"
   description = "elb"
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${var.vpc_id}"
 
   tags {
     Name = "sg-dev-elb"
@@ -65,7 +65,7 @@ resource "aws_elb" "elb" {
 resource "aws_security_group" "app" {
   name = "sg_dev_app"
   description = "app"
-  vpc_id = "${aws_vpc.vpc.id}"
+  vpc_id = "${var.vpc_id}"
 
   tags {
     Name = "sg-dev-app"
