@@ -31,4 +31,5 @@ module "elbasg" {
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_id = "${module.vpc.subnet_public_id}"
   subnet_private_id = "${module.vpc.subnet_private_id}"
+  nat_gateway_id = "${module.vpc.nat_gateway_id}"
 }
