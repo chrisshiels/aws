@@ -126,7 +126,7 @@ resource "aws_launch_configuration" "app" {
   key_name = "aws"
   enable_monitoring = false
   user_data = "${data.template_file.user-data.rendered}"
-  iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
+  iam_instance_profile = "${var.instance_profile_id}"
 
   root_block_device {
     volume_type = "gp2"
