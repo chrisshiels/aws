@@ -9,3 +9,7 @@ output "subnet_public_id" {
 output "subnet_private_id" {
   value = "${aws_subnet.private.id}"
 }
+
+output "internet_gateway_id" {
+  value = "${aws_internet_gateway.igw.id}"
+}

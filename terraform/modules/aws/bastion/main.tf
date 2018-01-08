@@ -50,11 +50,10 @@ resource "aws_instance" "bastion" {
 
   tags {
     Name = "dev-bastion"
+    TerraformDependsOn = "${var.internet_gateway_id}"
   }
 
   volume_tags {
     Name = "dev-bastion"
   }
-
-  depends_on = [ "aws_internet_gateway.igw" ]
 }

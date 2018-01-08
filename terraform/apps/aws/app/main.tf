@@ -22,6 +22,7 @@ module "bastion" {
   source = "../../../modules/aws/bastion"
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_id = "${module.vpc.subnet_public_id}"
+  internet_gateway_id = "${module.vpc.internet_gateway_id}"
 }
 
 
