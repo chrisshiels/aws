@@ -32,7 +32,7 @@ resource "aws_security_group_rule" "bastion-ingress-tcp22-from-all" {
 
 
 resource "aws_instance" "bastion" {
-  ami = "${data.aws_ami.centos7.id}"
+  ami = "${var.ami_id}"
   instance_type = "t2.micro"
   vpc_security_group_ids = [ "${aws_security_group.bastion.id}" ]
   subnet_id = "${var.subnet_public_id}"

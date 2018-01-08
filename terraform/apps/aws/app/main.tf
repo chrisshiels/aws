@@ -24,6 +24,7 @@ module "bastion" {
   subnet_public_id = "${module.vpc.subnet_public_id}"
   internet_gateway_id = "${module.vpc.internet_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
+  ami_id = "${module.ami.ami_id}"
 }
 
 
@@ -34,4 +35,5 @@ module "elbasg" {
   subnet_private_id = "${module.vpc.subnet_private_id}"
   nat_gateway_id = "${module.vpc.nat_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
+  ami_id = "${module.ami.ami_id}"
 }

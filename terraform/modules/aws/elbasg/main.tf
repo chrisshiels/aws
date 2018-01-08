@@ -119,7 +119,7 @@ resource "aws_security_group_rule" "app-ingress-tcp80-from-elb" {
 
 resource "aws_launch_configuration" "app" {
   name = "asglc-dev-app"
-  image_id = "${data.aws_ami.centos7.id}"
+  image_id = "${var.ami_id}"
   instance_type = "t2.micro"
   security_groups = [ "${aws_security_group.app.id}" ]
   associate_public_ip_address = false
