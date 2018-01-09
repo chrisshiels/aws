@@ -11,3 +11,5 @@ variable "instance_profile_id" {}
 variable "ami_id" {}
 
 variable "user_data" {}
+
+variable "bastion_security_group_id" {}

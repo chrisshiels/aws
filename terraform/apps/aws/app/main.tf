@@ -38,4 +38,5 @@ module "elbasg" {
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${module.ami.ami_id}"
   user_data = "${module.userdata.user_data}"
+  bastion_security_group_id = "${module.bastion.bastion_security_group_id}"
 }

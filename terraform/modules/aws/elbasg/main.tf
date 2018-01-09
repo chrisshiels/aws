@@ -90,7 +90,7 @@ resource "aws_security_group_rule" "app-ingress-tcp22-from-bastion" {
   protocol = "tcp"
   from_port = 22
   to_port = 22
-  source_security_group_id = "${aws_security_group.bastion.id}"
+  source_security_group_id = "${var.bastion_security_group_id}"
   description = "app-ingress-tcp22-from-bastion"
 }
 
@@ -101,7 +101,7 @@ resource "aws_security_group_rule" "app-ingress-tcp80-from-bastion" {
   protocol = "tcp"
   from_port = 80
   to_port = 80
-  source_security_group_id = "${aws_security_group.bastion.id}"
+  source_security_group_id = "${var.bastion_security_group_id}"
   description = "app-ingress-tcp80-from-bastion"
 }
 
