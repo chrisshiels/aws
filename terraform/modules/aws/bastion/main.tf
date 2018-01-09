@@ -39,7 +39,7 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   key_name = "aws"
   monitoring = false
-  user_data = "${data.template_file.user-data.rendered}"
+  user_data = "${var.user_data}"
   iam_instance_profile = "${var.instance_profile_id}"
 
   root_block_device {

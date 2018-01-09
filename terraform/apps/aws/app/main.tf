@@ -25,6 +25,7 @@ module "bastion" {
   internet_gateway_id = "${module.vpc.internet_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${module.ami.ami_id}"
+  user_data = "${module.userdata.user_data}"
 }
 
 
@@ -36,4 +37,5 @@ module "elbasg" {
   nat_gateway_id = "${module.vpc.nat_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${module.ami.ami_id}"
+  user_data = "${module.userdata.user_data}"
 }

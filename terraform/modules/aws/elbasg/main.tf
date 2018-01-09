@@ -125,7 +125,7 @@ resource "aws_launch_configuration" "app" {
   associate_public_ip_address = false
   key_name = "aws"
   enable_monitoring = false
-  user_data = "${data.template_file.user-data.rendered}"
+  user_data = "${var.user_data}"
   iam_instance_profile = "${var.instance_profile_id}"
 
   root_block_device {
