@@ -1,10 +1,10 @@
 resource "aws_security_group" "elb" {
-  name = "sg_dev_elb"
-  description = "elb"
+  name = "${format("sg_%s_elb", replace(var.name, "-", "_"))}"
+  description = "sg-${var.name}-elb"
   vpc_id = "${var.vpc_id}"
 
   tags {
-    Name = "sg-dev-elb"
+    Name = "sg-${var.name}-elb"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_security_group_rule" "elb-ingress-tcp80-from-all" {
 
 
 resource "aws_elb" "elb" {
-  name = "elb-dev-app"
+  name = "elb-${var.name}"
   internal = false
   subnets = [ "${var.subnet_public_id}" ]
   security_groups = [ "${aws_security_group.elb.id}" ]
@@ -57,18 +57,18 @@ resource "aws_elb" "elb" {
   }
 
   tags {
-    Name = "elb-dev-app"
+    Name = "elb-${var.name}"
   }
 }
 
 
 resource "aws_security_group" "app" {
-  name = "sg_dev_app"
-  description = "app"
+  name = "${format("sg_%s", replace(var.name, "-", "_"))}"
+  description = "sg-${var.name}"
   vpc_id = "${var.vpc_id}"
 
   tags {
-    Name = "sg-dev-app"
+    Name = "sg-${var.name}"
   }
 }
 
@@ -118,7 +118,7 @@ resource "aws_security_group_rule" "app-ingress-tcp80-from-elb" {
 
 
 resource "aws_launch_configuration" "app" {
-  name = "asglc-dev-app"
+  name = "asglc-${var.name}"
   image_id = "${var.ami_id}"
   instance_type = "t2.micro"
   security_groups = [ "${aws_security_group.app.id}" ]
@@ -137,7 +137,7 @@ resource "aws_launch_configuration" "app" {
 
 
 resource "aws_autoscaling_group" "app" {
-  name = "asg-dev-app"
+  name = "asg-${var.name}"
   launch_configuration = "${aws_launch_configuration.app.name}"
   vpc_zone_identifier = [ "${var.subnet_private_id}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
@@ -151,7 +151,7 @@ resource "aws_autoscaling_group" "app" {
 
   tag {
     key = "Name"
-    value = "dev-app"
+    value = "asg-${var.name}"
     propagate_at_launch = true
   }
 

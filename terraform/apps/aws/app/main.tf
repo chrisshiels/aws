@@ -32,6 +32,7 @@ module "bastion" {
 
 module "elbasg" {
   source = "../../../modules/aws/elbasg"
+  name = "dev-app"
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_id = "${module.vpc.subnet_public_id}"
   subnet_private_id = "${module.vpc.subnet_private_id}"
