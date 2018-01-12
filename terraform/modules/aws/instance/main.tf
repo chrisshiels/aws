@@ -1,4 +1,4 @@
-resource "aws_security_group" "bastion" {
+resource "aws_security_group" "instance" {
   name = "${format("sg_%s", replace(var.name, "-", "_"))}"
   description = "sg-${var.name}"
   vpc_id = "${var.vpc_id}"
@@ -9,32 +9,32 @@ resource "aws_security_group" "bastion" {
 }
 
 
-resource "aws_security_group_rule" "bastion-egress-allall-to-all" {
-  security_group_id = "${aws_security_group.bastion.id}"
+resource "aws_security_group_rule" "instance-egress-allall-to-all" {
+  security_group_id = "${aws_security_group.instance.id}"
   type = "egress"
   protocol = "all"
   from_port = 0
   to_port = 0
   cidr_blocks = [ "0.0.0.0/0" ]
-  description = "bastion-egress-allall-to-all"
+  description = "instance-egress-allall-to-all"
 }
 
 
-resource "aws_security_group_rule" "bastion-ingress-tcp22-from-all" {
-  security_group_id = "${aws_security_group.bastion.id}"
+resource "aws_security_group_rule" "instance-ingress-tcp22-from-all" {
+  security_group_id = "${aws_security_group.instance.id}"
   type = "ingress"
   protocol = "tcp"
   from_port = 22
   to_port = 22
   cidr_blocks = [ "0.0.0.0/0" ]
-  description = "bastion-ingress-tcp22-from-all"
+  description = "instance-ingress-tcp22-from-all"
 }
 
 
-resource "aws_instance" "bastion" {
+resource "aws_instance" "instance" {
   ami = "${var.ami_id}"
   instance_type = "t2.micro"
-  vpc_security_group_ids = [ "${aws_security_group.bastion.id}" ]
+  vpc_security_group_ids = [ "${aws_security_group.instance.id}" ]
   subnet_id = "${var.subnet_public_id}"
   associate_public_ip_address = true
   key_name = "aws"
