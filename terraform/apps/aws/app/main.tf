@@ -21,7 +21,7 @@ module "userdata" {
 
 
 module "bastion" {
-  source = "../../../modules/aws/bastion"
+  source = "../../../modules/aws/instance"
   name = "${var.env}-bastion"
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_id = "${module.vpc.subnet_public_id}"
@@ -42,5 +42,5 @@ module "elbasg" {
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${module.ami.ami_id}"
   user_data = "${module.userdata.user_data}"
-  bastion_security_group_id = "${module.bastion.bastion_security_group_id}"
+  bastion_security_group_id = "${module.bastion.security_group_id}"
 }
