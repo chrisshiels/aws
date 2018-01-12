@@ -11,6 +11,7 @@ module "ami" {
 
 module "instanceprofile" {
   source = "../../../modules/aws/instanceprofile"
+  name = "dev"
 }
 
 
