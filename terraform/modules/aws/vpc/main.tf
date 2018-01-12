@@ -5,7 +5,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags {
-    Name = "vpc-dev"
+    Name = "vpc-${var.name}"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags {
-    Name = "sn-dev-public"
+    Name = "sn-${var.name}-public"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = false
 
   tags {
-    Name = "sn-dev-private"
+    Name = "sn-${var.name}-private"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "igw-dev"
+    Name = "igw-${var.name}"
   }
 }
 
@@ -54,7 +54,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id = "${aws_subnet.public.id}"
 
   tags {
-    Name = "nat-dev"
+    Name = "nat-${var.name}"
   }
 
   depends_on = [ "aws_internet_gateway.igw" ]
@@ -65,7 +65,7 @@ resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "rtb-dev-public"
+    Name = "rtb-${var.name}-public"
   }
 }
 
@@ -87,7 +87,7 @@ resource "aws_route_table" "private" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "rtb-dev-private"
+    Name = "rtb-${var.name}-private"
   }
 }
 
