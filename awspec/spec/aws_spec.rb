@@ -92,7 +92,7 @@ describe ec2('dev-bastion') do
 end
 
 
-describe security_group('sg-dev-elb') do
+describe security_group('sg-dev-app-elb') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
@@ -104,7 +104,7 @@ describe elb('elb-dev-app') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_subnet('sn-dev-public') }
-  it { should have_security_group('sg-dev-elb') }
+  it { should have_security_group('sg-dev-app-elb') }
   it { should have_listener(protocol: 'HTTP',
 			    port: 80,
 			    instance_protocol: 'HTTP',
@@ -123,7 +123,7 @@ describe security_group('sg-dev-app') do
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
   its(:inbound) { should be_opened(22).protocol('tcp').for('sg-dev-bastion') }
   its(:inbound) { should be_opened(80).protocol('tcp').for('sg-dev-bastion') }
-  its(:inbound) { should be_opened(80).protocol('tcp').for('sg-dev-elb') }
+  its(:inbound) { should be_opened(80).protocol('tcp').for('sg-dev-app-elb') }
 end
 
 

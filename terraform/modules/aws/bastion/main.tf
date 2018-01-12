@@ -1,10 +1,10 @@
 resource "aws_security_group" "bastion" {
-  name = "sg_dev_bastion"
-  description = "bastion"
+  name = "${format("sg_%s", replace(var.name, "-", "_"))}"
+  description = "sg-${var.name}"
   vpc_id = "${var.vpc_id}"
 
   tags {
-    Name = "sg-dev-bastion"
+    Name = "sg-${var.name}"
   }
 }
 
@@ -49,11 +49,11 @@ resource "aws_instance" "bastion" {
   }
 
   tags {
-    Name = "dev-bastion"
+    Name = "${var.name}"
     TerraformDependsOn = "${var.internet_gateway_id}"
   }
 
   volume_tags {
-    Name = "dev-bastion"
+    Name = "${var.name}"
   }
 }

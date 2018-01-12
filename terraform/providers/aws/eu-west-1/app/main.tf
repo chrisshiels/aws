@@ -5,4 +5,5 @@ provider "aws" {
 
 module "app" {
   source = "../../../../apps/aws/app"
+  env = "dev"
 }

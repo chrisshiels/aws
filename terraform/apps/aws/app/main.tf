@@ -1,5 +1,6 @@
 module "vpc" {
   source = "../../../modules/aws/vpc"
+  name = "${var.env}"
 }
 
 
@@ -10,6 +11,7 @@ module "ami" {
 
 module "instanceprofile" {
   source = "../../../modules/aws/instanceprofile"
+  name = "${var.env}"
 }
 
 
@@ -20,6 +22,7 @@ module "userdata" {
 
 module "bastion" {
   source = "../../../modules/aws/bastion"
+  name = "${var.env}-bastion"
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_id = "${module.vpc.subnet_public_id}"
   internet_gateway_id = "${module.vpc.internet_gateway_id}"
@@ -31,6 +34,7 @@ module "bastion" {
 
 module "elbasg" {
   source = "../../../modules/aws/elbasg"
+  name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_id = "${module.vpc.subnet_public_id}"
   subnet_private_id = "${module.vpc.subnet_private_id}"

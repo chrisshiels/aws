@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "assumerole" {
 
 
 resource "aws_iam_role" "instance" {
-  name = "role-dev-instance"
+  name = "role-${var.name}-instance"
   assume_role_policy = "${data.aws_iam_policy_document.assumerole.json}"
 }
 
@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "describetags" {
 
 
 resource "aws_iam_policy" "describetags" {
-  name = "policy-dev-describetags"
+  name = "policy-${var.name}-describetags"
   policy = "${data.aws_iam_policy_document.describetags.json}"
 }
 
@@ -41,6 +41,6 @@ resource "aws_iam_role_policy_attachment" "describetags" {
 
 
 resource "aws_iam_instance_profile" "instance" {
-  name = "instanceprofile-dev-instance"
+  name = "instanceprofile-${var.name}-instance"
   role = "${aws_iam_role.instance.name}"
 }
