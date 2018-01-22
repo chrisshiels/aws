@@ -1,5 +1,5 @@
 resource "aws_vpc" "vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "${var.cidr}"
   instance_tenancy = "default"
   enable_dns_support = true
   enable_dns_hostnames = true
@@ -11,25 +11,27 @@ resource "aws_vpc" "vpc" {
 
 
 resource "aws_subnet" "public" {
+  count = "${length(var.publicsubnetcidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
-  availability_zone = "eu-west-1a"
-  cidr_block = "10.0.0.0/24"
+  availability_zone = "${element(var.availabilityzones, count.index)}"
+  cidr_block = "${element(var.publicsubnetcidrs, count.index)}"
   map_public_ip_on_launch = true
 
   tags {
-    Name = "sn-${var.name}-public"
+    Name = "sn-${var.name}-public-${substr(element(var.availabilityzones, count.index), -2, -1)}"
   }
 }
 
 
 resource "aws_subnet" "private" {
+  count = "${length(var.privatesubnetcidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
-  availability_zone = "eu-west-1a"
-  cidr_block = "10.0.1.0/24"
+  availability_zone = "${element(var.availabilityzones, count.index)}"
+  cidr_block = "${element(var.privatesubnetcidrs, count.index)}"
   map_public_ip_on_launch = false
 
   tags {
-    Name = "sn-${var.name}-private"
+    Name = "sn-${var.name}-private-${substr(element(var.availabilityzones, count.index), -2, -1)}"
   }
 }
 
@@ -51,7 +53,7 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = "${aws_eip.nat.id}"
-  subnet_id = "${aws_subnet.public.id}"
+  subnet_id = "${element(aws_subnet.public.*.id, 0)}"
 
   tags {
     Name = "nat-${var.name}"
@@ -78,7 +80,8 @@ resource "aws_route" "public-default" {
 
 
 resource "aws_route_table_association" "public-public" {
-  subnet_id = "${aws_subnet.public.id}"
+  count = "${length(var.publicsubnetcidrs)}"
+  subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
   route_table_id = "${aws_route_table.public.id}"
 }
 
@@ -100,6 +103,7 @@ resource "aws_route" "private-default" {
 
 
 resource "aws_route_table_association" "private-private" {
-  subnet_id = "${aws_subnet.private.id}"
+  count = "${length(var.privatesubnetcidrs)}"
+  subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
   route_table_id = "${aws_route_table.private.id}"
 }

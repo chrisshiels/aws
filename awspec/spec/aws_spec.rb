@@ -15,19 +15,31 @@ describe vpc('vpc-dev') do
 end
 
 
-describe subnet('sn-dev-public') do
-  it { should exist }
-  it { should be_available }
-  it { should belong_to_vpc('vpc-dev') }
-  its(:cidr_block) { should eq '10.0.0.0/24' }
+{
+  'eu-west-1a' => '10.0.1.0/24',
+  'eu-west-1b' => '10.0.2.0/24',
+  'eu-west-1c' => '10.0.3.0/24'
+}.each do | az, cidr |
+  describe subnet("sn-dev-public-#{az.split('-').last()}") do
+    it { should exist }
+    it { should be_available }
+    it { should belong_to_vpc('vpc-dev') }
+    its(:cidr_block) { should eq cidr }
+  end
 end
 
 
-describe subnet('sn-dev-private') do
-  it { should exist }
-  it { should be_available }
-  it { should belong_to_vpc('vpc-dev') }
-  its(:cidr_block) { should eq '10.0.1.0/24' }
+{
+  'eu-west-1a' => '10.0.4.0/24',
+  'eu-west-1b' => '10.0.5.0/24',
+  'eu-west-1c' => '10.0.6.0/24'
+}.each do | az, cidr |
+  describe subnet("sn-dev-private-#{az.split('-').last()}") do
+    it { should exist }
+    it { should be_available }
+    it { should belong_to_vpc('vpc-dev') }
+    its(:cidr_block) { should eq cidr }
+  end
 end
 
 
@@ -41,7 +53,9 @@ describe route_table('rtb-dev-public') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
-  it { should have_subnet('sn-dev-public') }
+  it { should have_subnet('sn-dev-public-1a') }
+  it { should have_subnet('sn-dev-public-1b') }
+  it { should have_subnet('sn-dev-public-1c') }
   its('routes.last.gateway_id') { should match /^igw-/ }
 end
 
@@ -50,7 +64,9 @@ describe route_table('rtb-dev-private') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
-  it { should have_subnet('sn-dev-private') }
+  it { should have_subnet('sn-dev-private-1a') }
+  it { should have_subnet('sn-dev-private-1b') }
+  it { should have_subnet('sn-dev-private-1c') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
 end
 
@@ -83,7 +99,7 @@ describe ec2('dev-bastion') do
   its(:instance_type) { should eq 't2.micro' }
   it { should have_security_group('sg-dev-bastion') }
   it { should belong_to_vpc('vpc-dev') }
-  it { should belong_to_subnet('sn-dev-public') }
+  it { should belong_to_subnet('sn-dev-public-1a') }
   it { should have_ebs('dev-bastion') }
   its(:key_name) { should eq 'aws' }
   it { should have_iam_instance_profile('instanceprofile-dev-instance') }
@@ -103,7 +119,7 @@ end
 describe elb('elb-dev-app') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
-  it { should have_subnet('sn-dev-public') }
+  it { should have_subnet('sn-dev-public-1a') }
   it { should have_security_group('sg-dev-app-elb') }
   it { should have_listener(protocol: 'HTTP',
 			    port: 80,
