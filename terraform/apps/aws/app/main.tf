@@ -8,8 +8,20 @@ module "vpc" {
 }
 
 
-module "ami" {
-  source = "../../../modules/aws/ami"
+data "aws_ami" "centos7" {
+  most_recent = true
+
+  filter {
+    name = "name"
+    values = [ "CentOS Linux 7 x86_64 HVM EBS*" ]
+  }
+
+  filter {
+    name = "virtualization-type"
+    values = [ "hvm" ]
+  }
+
+  owners = [ "679593333241" ]
 }
 
 
@@ -31,7 +43,7 @@ module "bastion" {
   subnet_public_id = "${element(module.vpc.subnet_public_ids, 0)}"
   internet_gateway_id = "${module.vpc.internet_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
-  ami_id = "${module.ami.ami_id}"
+  ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${module.userdata.user_data}"
 }
 
@@ -44,7 +56,7 @@ module "elbasg" {
   subnet_private_ids = "${module.vpc.subnet_private_ids}"
   nat_gateway_id = "${module.vpc.nat_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
-  ami_id = "${module.ami.ami_id}"
+  ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${module.userdata.user_data}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }
