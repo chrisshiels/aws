@@ -31,8 +31,11 @@ module "instanceprofile" {
 }
 
 
-module "userdata" {
-  source = "../../../modules/aws/userdata"
+data "template_file" "user-data" {
+  template = "${file(format("%s/files/user-data.tpl", path.module))}"
+
+  vars {
+  }
 }
 
 
@@ -44,7 +47,7 @@ module "bastion" {
   internet_gateway_id = "${module.vpc.internet_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${data.aws_ami.centos7.id}"
-  user_data = "${module.userdata.user_data}"
+  user_data = "${data.template_file.user-data.rendered}"
 }
 
 
@@ -57,6 +60,6 @@ module "elbasg" {
   nat_gateway_id = "${module.vpc.nat_gateway_id}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${data.aws_ami.centos7.id}"
-  user_data = "${module.userdata.user_data}"
+  user_data = "${data.template_file.user-data.rendered}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }
