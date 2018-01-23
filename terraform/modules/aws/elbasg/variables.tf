@@ -2,9 +2,13 @@ variable "name" {}
 
 variable "vpc_id" {}
 
-variable "subnet_public_id" {}
+variable "subnet_public_ids" {
+  type = "list"
+}
 
-variable "subnet_private_id" {}
+variable "subnet_private_ids" {
+  type = "list"
+}
 
 variable "nat_gateway_id" {}
 

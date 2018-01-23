@@ -120,6 +120,8 @@ describe elb('elb-dev-app') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_subnet('sn-dev-public-1a') }
+  it { should have_subnet('sn-dev-public-1b') }
+  it { should have_subnet('sn-dev-public-1c') }
   it { should have_security_group('sg-dev-app-elb') }
   it { should have_listener(protocol: 'HTTP',
 			    port: 80,

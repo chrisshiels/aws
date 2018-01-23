@@ -34,7 +34,7 @@ resource "aws_security_group_rule" "elb-ingress-tcp80-from-all" {
 resource "aws_elb" "elb" {
   name = "elb-${var.name}"
   internal = false
-  subnets = [ "${var.subnet_public_id}" ]
+  subnets = [ "${var.subnet_public_ids}" ]
   security_groups = [ "${aws_security_group.elb.id}" ]
   cross_zone_load_balancing = true
   idle_timeout = 60
@@ -139,7 +139,7 @@ resource "aws_launch_configuration" "app" {
 resource "aws_autoscaling_group" "app" {
   name = "asg-${var.name}"
   launch_configuration = "${aws_launch_configuration.app.name}"
-  vpc_zone_identifier = [ "${var.subnet_private_id}" ]
+  vpc_zone_identifier = [ "${var.subnet_private_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
   min_size = 2
   max_size = 2
