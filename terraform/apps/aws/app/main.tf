@@ -2,7 +2,7 @@ module "vpc" {
   source = "../../../modules/aws/vpc"
   name = "${var.env}"
   cidr = "10.0.0.0/16"
-  availabilityzones = [ "eu-west-1a",  "eu-west-1b", "eu-west-1c" ]
+  availabilityzones = "${var.availabilityzones}"
   publicsubnetcidrs = [ "10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24" ]
   privatesubnetcidrs = [ "10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24" ]
 }
