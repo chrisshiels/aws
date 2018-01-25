@@ -1,1 +1,3 @@
 variable "name" {}
+
+variable "policy" {}

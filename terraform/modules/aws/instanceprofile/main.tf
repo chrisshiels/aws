@@ -10,37 +10,25 @@ data "aws_iam_policy_document" "assumerole" {
 }
 
 
-resource "aws_iam_role" "instance" {
-  name = "role-${var.name}-instance"
+resource "aws_iam_role" "role" {
+  name = "role-${var.name}"
   assume_role_policy = "${data.aws_iam_policy_document.assumerole.json}"
 }
 
 
-data "aws_iam_policy_document" "describetags" {
-  statement {
-    actions = [ "ec2:DescribeTags" ]
-
-    # Note:
-    # As of December 2017 it doesn't look to be possible to limit this to
-    # return information for the calling instance only.
-    resources = [ "*" ]
-  }
+resource "aws_iam_policy" "policy" {
+  name = "policy-${var.name}"
+  policy = "${var.policy}"
 }
 
 
-resource "aws_iam_policy" "describetags" {
-  name = "policy-${var.name}-describetags"
-  policy = "${data.aws_iam_policy_document.describetags.json}"
+resource "aws_iam_role_policy_attachment" "policyattachment" {
+  role = "${aws_iam_role.role.name}"
+  policy_arn = "${aws_iam_policy.policy.arn}"
 }
 
 
-resource "aws_iam_role_policy_attachment" "describetags" {
-  role = "${aws_iam_role.instance.name}"
-  policy_arn = "${aws_iam_policy.describetags.arn}"
-}
-
-
-resource "aws_iam_instance_profile" "instance" {
-  name = "instanceprofile-${var.name}-instance"
-  role = "${aws_iam_role.instance.name}"
+resource "aws_iam_instance_profile" "instanceprofile" {
+  name = "instanceprofile-${var.name}"
+  role = "${aws_iam_role.role.name}"
 }

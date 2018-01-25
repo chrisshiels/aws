@@ -77,7 +77,7 @@ describe iam_role('role-dev-instance') do
 end
 
 
-describe iam_policy('policy-dev-describetags') do
+describe iam_policy('policy-dev-instance') do
   it { should exist }
   it { should be_attachable }
   its(:attachment_count) { should eq 1 }

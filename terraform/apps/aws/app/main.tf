@@ -25,9 +25,22 @@ data "aws_ami" "centos7" {
 }
 
 
+data "aws_iam_policy_document" "policy" {
+  statement {
+    actions = [ "ec2:DescribeTags" ]
+
+    # Note:
+    # As of December 2017 it doesn't look to be possible to limit this to
+    # return information for the calling instance only.
+    resources = [ "*" ]
+  }
+}
+
+
 module "instanceprofile" {
   source = "../../../modules/aws/instanceprofile"
-  name = "${var.env}"
+  name = "${var.env}-instance"
+  policy = "${data.aws_iam_policy_document.policy.json}"
 }
 
 
