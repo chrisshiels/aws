@@ -157,7 +157,7 @@ resource "aws_autoscaling_group" "app" {
 
   tag {
     key = "TerraformDependsOn"
-    value = "${var.nat_gateway_id}"
+    value = "${join(",", var.nat_gateway_ids)}"
     propagate_at_launch = true
   }
 }

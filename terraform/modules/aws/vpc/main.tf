@@ -46,14 +46,16 @@ resource "aws_internet_gateway" "igw" {
 
 
 resource "aws_eip" "nat" {
+  count = "${length(var.publicsubnetcidrs)}"
   vpc = true
   depends_on = [ "aws_internet_gateway.igw" ]
 }
 
 
 resource "aws_nat_gateway" "nat" {
-  allocation_id = "${aws_eip.nat.id}"
-  subnet_id = "${element(aws_subnet.public.*.id, 0)}"
+  count = "${length(var.publicsubnetcidrs)}"
+  allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
+  subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
 
   tags {
     Name = "nat-${var.name}"
@@ -87,23 +89,25 @@ resource "aws_route_table_association" "public-public" {
 
 
 resource "aws_route_table" "private" {
+  count = "${length(var.privatesubnetcidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "rtb-${var.name}-private"
+    Name = "rtb-${var.name}-private-${substr(element(var.availabilityzones, count.index), -2, -1)}"
   }
 }
 
 
 resource "aws_route" "private-default" {
-  route_table_id = "${aws_route_table.private.id}"
+  count = "${length(var.privatesubnetcidrs)}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = "${aws_nat_gateway.nat.id}"
+  nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
 }
 
 
 resource "aws_route_table_association" "private-private" {
   count = "${length(var.privatesubnetcidrs)}"
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
-  route_table_id = "${aws_route_table.private.id}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }

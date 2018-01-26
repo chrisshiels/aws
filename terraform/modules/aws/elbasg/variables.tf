@@ -10,7 +10,9 @@ variable "subnet_private_ids" {
   type = "list"
 }
 
-variable "nat_gateway_id" {}
+variable "nat_gateway_ids" {
+  type = "list"
+}
 
 variable "instance_profile_id" {}
 
