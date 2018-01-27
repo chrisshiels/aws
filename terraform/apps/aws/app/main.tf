@@ -70,7 +70,7 @@ module "elbasg" {
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_ids = "${module.vpc.subnet_public_ids}"
   subnet_private_ids = "${module.vpc.subnet_private_ids}"
-  nat_gateway_id = "${module.vpc.nat_gateway_id}"
+  nat_gateway_ids = "${module.vpc.nat_gateway_ids}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"

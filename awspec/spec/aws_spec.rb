@@ -11,7 +11,9 @@ describe vpc('vpc-dev') do
   it { should be_available }
   its(:cidr_block) { should eq '10.0.0.0/16' }
   it { should have_route_table('rtb-dev-public') }
-  it { should have_route_table('rtb-dev-private') }
+  it { should have_route_table('rtb-dev-private-1a') }
+  it { should have_route_table('rtb-dev-private-1b') }
+  it { should have_route_table('rtb-dev-private-1c') }
 end
 
 
@@ -60,12 +62,28 @@ describe route_table('rtb-dev-public') do
 end
 
 
-describe route_table('rtb-dev-private') do
+describe route_table('rtb-dev-private-1a') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-dev-private-1a') }
+  its('routes.last.nat_gateway_id') { should match /^nat-/ }
+end
+
+
+describe route_table('rtb-dev-private-1b') do
+  it { should exist }
+  it { should belong_to_vpc('vpc-dev') }
+  it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-dev-private-1b') }
+  its('routes.last.nat_gateway_id') { should match /^nat-/ }
+end
+
+
+describe route_table('rtb-dev-private-1c') do
+  it { should exist }
+  it { should belong_to_vpc('vpc-dev') }
+  it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-dev-private-1c') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
 end
