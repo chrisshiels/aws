@@ -4,7 +4,7 @@ provider "aws" {
 
 
 module "app" {
-  source = "../../../../apps/aws/app"
-  env = "dev"
+  source = "../../../../../apps/aws/app"
+  env = "stage"
   availabilityzones = [ "eu-west-1a", "eu-west-1b", "eu-west-1c" ]
 }
