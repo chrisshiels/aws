@@ -2,7 +2,7 @@
 
 Terraform.
 
-    host$ cd providers/aws/eu-west-1/app/
+    host$ cd providers/aws/eu-west-1/app/dev/
     host$ terraform init
     host$ terraform plan
     host$ terraform apply
