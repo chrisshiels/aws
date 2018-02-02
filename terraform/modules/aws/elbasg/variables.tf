@@ -24,4 +24,10 @@ variable "key_name" {}
 
 variable "instance_type" {}
 
+variable "min_size" {}
+
+variable "max_size" {}
+
+variable "desired_capacity" {}
+
 variable "bastion_security_group_id" {}

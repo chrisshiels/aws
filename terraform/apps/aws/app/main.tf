@@ -78,5 +78,8 @@ module "elbasg" {
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
   instance_type = "t2.micro"
+  min_size = "${var.min_size}"
+  max_size = "${var.max_size}"
+  desired_capacity = "${var.desired_capacity}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }

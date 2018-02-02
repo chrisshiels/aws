@@ -141,9 +141,9 @@ resource "aws_autoscaling_group" "app" {
   launch_configuration = "${aws_launch_configuration.app.name}"
   vpc_zone_identifier = [ "${var.subnet_private_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
-  min_size = 2
-  max_size = 2
-  desired_capacity = 2
+  min_size = "${var.min_size}"
+  max_size = "${var.max_size}"
+  desired_capacity = "${var.desired_capacity}"
   default_cooldown = 30
   health_check_grace_period = 60
   health_check_type = "EC2"
