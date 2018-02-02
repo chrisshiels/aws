@@ -61,6 +61,7 @@ module "bastion" {
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
+  key_name = "${var.key_name}"
 }
 
 
@@ -74,5 +75,6 @@ module "elbasg" {
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
+  key_name = "${var.key_name}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }
