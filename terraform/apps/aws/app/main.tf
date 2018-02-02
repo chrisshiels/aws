@@ -62,6 +62,7 @@ module "bastion" {
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
+  instance_type = "t2.micro"
 }
 
 
@@ -76,5 +77,6 @@ module "elbasg" {
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
+  instance_type = "t2.micro"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }

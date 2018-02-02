@@ -120,7 +120,7 @@ resource "aws_security_group_rule" "app-ingress-tcp80-from-elb" {
 resource "aws_launch_configuration" "app" {
   name = "asglc-${var.name}"
   image_id = "${var.ami_id}"
-  instance_type = "t2.micro"
+  instance_type = "${var.instance_type}"
   security_groups = [ "${aws_security_group.app.id}" ]
   associate_public_ip_address = false
   key_name = "${var.key_name}"

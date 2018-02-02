@@ -22,4 +22,6 @@ variable "user_data" {}
 
 variable "key_name" {}
 
+variable "instance_type" {}
+
 variable "bastion_security_group_id" {}
