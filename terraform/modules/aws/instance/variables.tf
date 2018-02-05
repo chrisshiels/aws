@@ -11,3 +11,7 @@ variable "instance_profile_id" {}
 variable "ami_id" {}
 
 variable "user_data" {}
+
+variable "key_name" {}
+
+variable "instance_type" {}

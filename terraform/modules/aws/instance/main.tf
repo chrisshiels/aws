@@ -33,11 +33,11 @@ resource "aws_security_group_rule" "instance-ingress-tcp22-from-all" {
 
 resource "aws_instance" "instance" {
   ami = "${var.ami_id}"
-  instance_type = "t2.micro"
+  instance_type = "${var.instance_type}"
   vpc_security_group_ids = [ "${aws_security_group.instance.id}" ]
   subnet_id = "${var.subnet_public_id}"
   associate_public_ip_address = true
-  key_name = "aws"
+  key_name = "${var.key_name}"
   monitoring = false
   user_data = "${var.user_data}"
   iam_instance_profile = "${var.instance_profile_id}"

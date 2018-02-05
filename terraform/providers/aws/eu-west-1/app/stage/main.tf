@@ -7,4 +7,8 @@ module "app" {
   source = "../../../../../apps/aws/app"
   env = "stage"
   availabilityzones = [ "eu-west-1a", "eu-west-1b", "eu-west-1c" ]
+  key_name = "aws"
+  min_size = 2
+  max_size = 2
+  desired_capacity = 2
 }

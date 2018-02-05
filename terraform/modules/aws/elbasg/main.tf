@@ -120,10 +120,10 @@ resource "aws_security_group_rule" "app-ingress-tcp80-from-elb" {
 resource "aws_launch_configuration" "app" {
   name = "asglc-${var.name}"
   image_id = "${var.ami_id}"
-  instance_type = "t2.micro"
+  instance_type = "${var.instance_type}"
   security_groups = [ "${aws_security_group.app.id}" ]
   associate_public_ip_address = false
-  key_name = "aws"
+  key_name = "${var.key_name}"
   enable_monitoring = false
   user_data = "${var.user_data}"
   iam_instance_profile = "${var.instance_profile_id}"
@@ -141,9 +141,9 @@ resource "aws_autoscaling_group" "app" {
   launch_configuration = "${aws_launch_configuration.app.name}"
   vpc_zone_identifier = [ "${var.subnet_private_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
-  min_size = 2
-  max_size = 2
-  desired_capacity = 2
+  min_size = "${var.min_size}"
+  max_size = "${var.max_size}"
+  desired_capacity = "${var.desired_capacity}"
   default_cooldown = 30
   health_check_grace_period = 60
   health_check_type = "EC2"
