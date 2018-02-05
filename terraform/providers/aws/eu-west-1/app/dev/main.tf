@@ -1,5 +1,17 @@
+terraform {
+  required_version = "= 0.11.3"
+}
+
+
 provider "aws" {
+  version = "1.8"
+
   region = "eu-west-1"
+}
+
+
+provider "template" {
+  version = "1.0"
 }
 
 
