@@ -15,3 +15,5 @@ variable "user_data" {}
 variable "key_name" {}
 
 variable "instance_type" {}
+
+variable "associate_public_ip_address" {}
