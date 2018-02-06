@@ -36,7 +36,7 @@ resource "aws_instance" "instance" {
   instance_type = "${var.instance_type}"
   vpc_security_group_ids = [ "${aws_security_group.instance.id}" ]
   subnet_id = "${var.subnet_public_id}"
-  associate_public_ip_address = true
+  associate_public_ip_address = "${var.associate_public_ip_address}"
   key_name = "${var.key_name}"
   monitoring = false
   user_data = "${var.user_data}"
@@ -44,7 +44,7 @@ resource "aws_instance" "instance" {
 
   root_block_device {
     volume_type = "gp2"
-    volume_size = "8"
+    volume_size = "${var.root_block_device_volume_size}"
     delete_on_termination = true
   }
 

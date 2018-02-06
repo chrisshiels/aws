@@ -63,6 +63,8 @@ module "bastion" {
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
   instance_type = "t2.micro"
+  associate_public_ip_address = true
+  root_block_device_volume_size = 8
 }
 
 
