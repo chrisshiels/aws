@@ -44,7 +44,7 @@ resource "aws_instance" "instance" {
 
   root_block_device {
     volume_type = "gp2"
-    volume_size = "8"
+    volume_size = "${var.root_block_device_volume_size}"
     delete_on_termination = true
   }
 
