@@ -49,6 +49,10 @@ resource "aws_eip" "nat" {
   count = "${length(var.publicsubnetcidrs)}"
   vpc = true
   depends_on = [ "aws_internet_gateway.igw" ]
+
+  tags {
+    Name = "eip-${var.name}-natgw-${substr(element(var.availabilityzones, count.index), -2, -1)}"
+  }
 }
 
 
@@ -58,7 +62,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
 
   tags {
-    Name = "nat-${var.name}"
+    Name = "nat-${var.name}-${substr(element(var.availabilityzones, count.index), -2, -1)}"
   }
 
   depends_on = [ "aws_internet_gateway.igw" ]
