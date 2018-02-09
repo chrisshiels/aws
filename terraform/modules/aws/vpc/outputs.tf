@@ -6,8 +6,8 @@ output "subnet_public_ids" {
   value = "${aws_subnet.public.*.id}"
 }
 
-output "subnet_private_ids" {
-  value = "${aws_subnet.private.*.id}"
+output "subnet_app_ids" {
+  value = "${aws_subnet.app.*.id}"
 }
 
 output "internet_gateway_id" {
@@ -26,6 +26,6 @@ output "route_table_public_id" {
   value = "${aws_route_table.public.id}"
 }
 
-output "route_table_private_ids" {
-  value = "${aws_route_table.private.*.id}"
+output "route_table_app_ids" {
+  value = "${aws_route_table.app.*.id}"
 }

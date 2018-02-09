@@ -4,7 +4,7 @@ module "vpc" {
   cidr = "10.0.0.0/16"
   availabilityzones = "${var.availabilityzones}"
   publicsubnetcidrs = "${var.publicsubnetcidrs}"
-  privatesubnetcidrs = "${var.privatesubnetcidrs}"
+  appsubnetcidrs = "${var.appsubnetcidrs}"
 }
 
 
@@ -73,7 +73,7 @@ module "elbasg" {
   name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
   subnet_public_ids = "${module.vpc.subnet_public_ids}"
-  subnet_private_ids = "${module.vpc.subnet_private_ids}"
+  subnet_app_ids = "${module.vpc.subnet_app_ids}"
   nat_gateway_ids = "${module.vpc.nat_gateway_ids}"
   instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   ami_id = "${data.aws_ami.centos7.id}"

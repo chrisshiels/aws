@@ -11,8 +11,8 @@ describe vpc('vpc-dev') do
   it { should be_available }
   its(:cidr_block) { should eq '10.0.0.0/16' }
   it { should have_route_table('rtb-dev-public') }
-  it { should have_route_table('rtb-dev-private-1a') }
-  it { should have_route_table('rtb-dev-private-1b') }
+  it { should have_route_table('rtb-dev-app-1a') }
+  it { should have_route_table('rtb-dev-app-1b') }
 end
 
 
@@ -33,7 +33,7 @@ end
   'eu-west-1a' => '10.0.4.0/24',
   'eu-west-1b' => '10.0.5.0/24'
 }.each do | az, cidr |
-  describe subnet("sn-dev-private-#{az.split('-').last()}") do
+  describe subnet("sn-dev-app-#{az.split('-').last()}") do
     it { should exist }
     it { should be_available }
     it { should belong_to_vpc('vpc-dev') }
@@ -58,20 +58,20 @@ describe route_table('rtb-dev-public') do
 end
 
 
-describe route_table('rtb-dev-private-1a') do
+describe route_table('rtb-dev-app-1a') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
-  it { should have_subnet('sn-dev-private-1a') }
+  it { should have_subnet('sn-dev-app-1a') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
 end
 
 
-describe route_table('rtb-dev-private-1b') do
+describe route_table('rtb-dev-app-1b') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
-  it { should have_subnet('sn-dev-private-1b') }
+  it { should have_subnet('sn-dev-app-1b') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
 end
 

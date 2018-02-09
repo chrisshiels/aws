@@ -139,7 +139,7 @@ resource "aws_launch_configuration" "app" {
 resource "aws_autoscaling_group" "app" {
   name = "asg-${var.name}"
   launch_configuration = "${aws_launch_configuration.app.name}"
-  vpc_zone_identifier = [ "${var.subnet_private_ids}" ]
+  vpc_zone_identifier = [ "${var.subnet_app_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
   min_size = "${var.min_size}"
   max_size = "${var.max_size}"
