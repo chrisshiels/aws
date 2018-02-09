@@ -36,6 +36,19 @@ resource "aws_subnet" "app" {
 }
 
 
+resource "aws_subnet" "data" {
+  count = "${length(var.datasubnetcidrs)}"
+  vpc_id = "${aws_vpc.vpc.id}"
+  availability_zone = "${element(var.availabilityzones, count.index)}"
+  cidr_block = "${element(var.datasubnetcidrs, count.index)}"
+  map_public_ip_on_launch = false
+
+  tags {
+    Name = "sn-${var.name}-data-${substr(element(var.availabilityzones, count.index), -2, -1)}"
+  }
+}
+
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
@@ -114,4 +127,29 @@ resource "aws_route_table_association" "app-app" {
   count = "${length(var.appsubnetcidrs)}"
   subnet_id = "${element(aws_subnet.app.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.app.*.id, count.index)}"
+}
+
+
+resource "aws_route_table" "data" {
+  count = "${length(var.datasubnetcidrs)}"
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "rtb-${var.name}-data-${substr(element(var.availabilityzones, count.index), -2, -1)}"
+  }
+}
+
+
+resource "aws_route" "data-default" {
+  count = "${length(var.datasubnetcidrs)}"
+  route_table_id = "${element(aws_route_table.data.*.id, count.index)}"
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
+}
+
+
+resource "aws_route_table_association" "data-data" {
+  count = "${length(var.datasubnetcidrs)}"
+  subnet_id = "${element(aws_subnet.data.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.data.*.id, count.index)}"
 }

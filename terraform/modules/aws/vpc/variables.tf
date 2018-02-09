@@ -13,3 +13,7 @@ variable "publicsubnetcidrs" {
 variable "appsubnetcidrs" {
   type = "list"
 }
+
+variable "datasubnetcidrs" {
+  type = "list"
+}

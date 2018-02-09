@@ -12,6 +12,10 @@ variable "appsubnetcidrs" {
   type = "list"
 }
 
+variable "datasubnetcidrs" {
+  type = "list"
+}
+
 variable "key_name" {}
 
 variable "min_size" {}

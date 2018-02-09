@@ -5,6 +5,7 @@ module "vpc" {
   availabilityzones = "${var.availabilityzones}"
   publicsubnetcidrs = "${var.publicsubnetcidrs}"
   appsubnetcidrs = "${var.appsubnetcidrs}"
+  datasubnetcidrs = "${var.datasubnetcidrs}"
 }
 
 
