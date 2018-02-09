@@ -23,15 +23,15 @@ resource "aws_subnet" "public" {
 }
 
 
-resource "aws_subnet" "private" {
-  count = "${length(var.privatesubnetcidrs)}"
+resource "aws_subnet" "app" {
+  count = "${length(var.appsubnetcidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
   availability_zone = "${element(var.availabilityzones, count.index)}"
-  cidr_block = "${element(var.privatesubnetcidrs, count.index)}"
+  cidr_block = "${element(var.appsubnetcidrs, count.index)}"
   map_public_ip_on_launch = false
 
   tags {
-    Name = "sn-${var.name}-private-${substr(element(var.availabilityzones, count.index), -2, -1)}"
+    Name = "sn-${var.name}-app-${substr(element(var.availabilityzones, count.index), -2, -1)}"
   }
 }
 
@@ -92,26 +92,26 @@ resource "aws_route_table_association" "public-public" {
 }
 
 
-resource "aws_route_table" "private" {
-  count = "${length(var.privatesubnetcidrs)}"
+resource "aws_route_table" "app" {
+  count = "${length(var.appsubnetcidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "rtb-${var.name}-private-${substr(element(var.availabilityzones, count.index), -2, -1)}"
+    Name = "rtb-${var.name}-app-${substr(element(var.availabilityzones, count.index), -2, -1)}"
   }
 }
 
 
-resource "aws_route" "private-default" {
-  count = "${length(var.privatesubnetcidrs)}"
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+resource "aws_route" "app-default" {
+  count = "${length(var.appsubnetcidrs)}"
+  route_table_id = "${element(aws_route_table.app.*.id, count.index)}"
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
 }
 
 
-resource "aws_route_table_association" "private-private" {
-  count = "${length(var.privatesubnetcidrs)}"
-  subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+resource "aws_route_table_association" "app-app" {
+  count = "${length(var.appsubnetcidrs)}"
+  subnet_id = "${element(aws_subnet.app.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.app.*.id, count.index)}"
 }

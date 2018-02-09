@@ -6,7 +6,7 @@ variable "subnet_public_ids" {
   type = "list"
 }
 
-variable "subnet_private_ids" {
+variable "subnet_app_ids" {
   type = "list"
 }
 
