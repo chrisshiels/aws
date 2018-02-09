@@ -29,3 +29,7 @@ output "route_table_public_id" {
 output "route_table_app_ids" {
   value = "${aws_route_table.app.*.id}"
 }
+
+output "route_table_data_ids" {
+  value = "${aws_route_table.data.*.id}"
+}
