@@ -16,7 +16,7 @@ provider "template" {
 
 
 module "app" {
-  source = "../../../../../apps/aws/app"
+  source = "../../../../../stacks/aws/app"
   env = "dev"
   availabilityzones = [ "eu-west-1a", "eu-west-1b" ]
   publicsubnetcidrs = [ "10.0.1.0/24", "10.0.2.0/24" ]
