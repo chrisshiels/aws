@@ -86,3 +86,27 @@ module "elbasg" {
   desired_capacity = "${var.desired_capacity}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }
+
+
+module "rds" {
+  source = "../../../modules/aws/rds"
+  name = "${var.env}-app"
+  vpc_id = "${module.vpc.vpc_id}"
+  subnet_ids = "${module.vpc.subnet_data_ids}"
+  engine = "mysql"
+  engine_version = "5.7.19"
+  license_model = "general-public-license"
+  port = 3306
+  multi_az = "${var.rds_multi_az}"
+  instance_class = "${var.rds_instance_class}"
+  allocated_storage = "${var.rds_allocated_storage}"
+  username = "admin"
+  password = "adminadmin"
+  schema_name = "db"
+  backup_window = "${var.rds_backup_window}"
+  backup_retention_period = "${var.rds_backup_retention_period}"
+  maintenance_window = "${var.rds_maintenance_window}"
+  auto_minor_version_upgrade = false
+  apply_immediately = false
+  skip_final_snapshot = true
+}

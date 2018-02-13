@@ -26,4 +26,10 @@ module "app" {
   min_size = 2
   max_size = 2
   desired_capacity = 2
+  rds_multi_az = false
+  rds_instance_class = "db.t2.micro"
+  rds_allocated_storage = 5
+  rds_backup_window = "01:00-03:00"
+  rds_backup_retention_period = 7
+  rds_maintenance_window = "mon:04:00-mon:06:00"
 }
