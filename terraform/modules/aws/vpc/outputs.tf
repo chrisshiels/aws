@@ -10,6 +10,10 @@ output "subnet_app_ids" {
   value = "${aws_subnet.app.*.id}"
 }
 
+output "subnet_data_ids" {
+  value = "${aws_subnet.app.*.id}"
+}
+
 output "internet_gateway_id" {
   value = "${aws_internet_gateway.igw.id}"
 }
