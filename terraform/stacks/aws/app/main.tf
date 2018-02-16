@@ -2,10 +2,10 @@ module "vpc" {
   source = "../../../modules/aws/vpc"
   name = "${var.env}"
   cidr = "10.0.0.0/16"
-  availabilityzones = "${var.availabilityzones}"
-  publicsubnetcidrs = "${var.publicsubnetcidrs}"
-  appsubnetcidrs = "${var.appsubnetcidrs}"
-  datasubnetcidrs = "${var.datasubnetcidrs}"
+  availabilityzones = "${var.vpc_availability_zones}"
+  publicsubnetcidrs = "${var.vpc_public_subnet_cidrs}"
+  appsubnetcidrs = "${var.vpc_app_subnet_cidrs}"
+  datasubnetcidrs = "${var.vpc_data_subnet_cidrs}"
 }
 
 
@@ -80,10 +80,10 @@ module "elbasg" {
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
-  instance_type = "t2.micro"
-  min_size = "${var.min_size}"
-  max_size = "${var.max_size}"
-  desired_capacity = "${var.desired_capacity}"
+  instance_type = "${var.asg_instance_type}"
+  min_size = "${var.asg_min_size}"
+  max_size = "${var.asg_max_size}"
+  desired_capacity = "${var.asg_desired_capacity}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
 }
 

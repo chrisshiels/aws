@@ -18,14 +18,15 @@ provider "template" {
 module "app" {
   source = "../../../../../stacks/aws/app"
   env = "dev"
-  availabilityzones = [ "eu-west-1a", "eu-west-1b" ]
-  publicsubnetcidrs = [ "10.0.1.0/24", "10.0.2.0/24" ]
-  appsubnetcidrs = [ "10.0.4.0/24", "10.0.5.0/24" ]
-  datasubnetcidrs = [ "10.0.7.0/24", "10.0.8.0/24" ]
   key_name = "aws"
-  min_size = 2
-  max_size = 2
-  desired_capacity = 2
+  vpc_availability_zones = [ "eu-west-1a", "eu-west-1b" ]
+  vpc_public_subnet_cidrs = [ "10.0.1.0/24", "10.0.2.0/24" ]
+  vpc_app_subnet_cidrs = [ "10.0.4.0/24", "10.0.5.0/24" ]
+  vpc_data_subnet_cidrs = [ "10.0.7.0/24", "10.0.8.0/24" ]
+  asg_instance_type = "t2.micro"
+  asg_min_size = 2
+  asg_max_size = 2
+  asg_desired_capacity = 2
   rds_multi_az = false
   rds_instance_class = "db.t2.micro"
   rds_allocated_storage = 5
