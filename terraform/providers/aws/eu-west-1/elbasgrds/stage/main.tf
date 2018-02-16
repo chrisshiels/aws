@@ -15,8 +15,8 @@ provider "template" {
 }
 
 
-module "app" {
-  source = "../../../../../stacks/aws/app"
+module "elbasgrds" {
+  source = "../../../../../stacks/aws/elbasgrds"
   env = "stage"
   key_name = "aws"
   vpc_availability_zones = [ "eu-west-1a", "eu-west-1b" ]
