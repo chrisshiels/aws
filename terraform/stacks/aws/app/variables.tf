@@ -1,28 +1,30 @@
 variable "env" {}
 
-variable "availabilityzones" {
-  type = "list"
-}
-
-variable "publicsubnetcidrs" {
-  type = "list"
-}
-
-variable "appsubnetcidrs" {
-  type = "list"
-}
-
-variable "datasubnetcidrs" {
-  type = "list"
-}
-
 variable "key_name" {}
 
-variable "min_size" {}
+variable "vpc_availability_zones" {
+  type = "list"
+}
 
-variable "max_size" {}
+variable "vpc_public_subnet_cidrs" {
+  type = "list"
+}
 
-variable "desired_capacity" {}
+variable "vpc_app_subnet_cidrs" {
+  type = "list"
+}
+
+variable "vpc_data_subnet_cidrs" {
+  type = "list"
+}
+
+variable "asg_instance_type" {}
+
+variable "asg_min_size" {}
+
+variable "asg_max_size" {}
+
+variable "asg_desired_capacity" {}
 
 variable "rds_multi_az" {}
 
