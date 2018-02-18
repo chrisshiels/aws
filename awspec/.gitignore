@@ -1,6 +1,3 @@
 .bundle
 Gemfile.lock
-.rspec
-Rakefile
-spec/.gitignore
 vendor
