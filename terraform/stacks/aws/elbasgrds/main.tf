@@ -2,10 +2,10 @@ module "vpc" {
   source = "../../../modules/aws/vpc"
   name = "${var.env}"
   cidr = "10.0.0.0/16"
-  availabilityzones = "${var.vpc_availability_zones}"
-  publicsubnetcidrs = "${var.vpc_public_subnet_cidrs}"
-  appsubnetcidrs = "${var.vpc_app_subnet_cidrs}"
-  datasubnetcidrs = "${var.vpc_data_subnet_cidrs}"
+  availability_zones = "${var.vpc_availability_zones}"
+  subnet_public_cidrs = "${var.vpc_subnet_public_cidrs}"
+  subnet_app_cidrs = "${var.vpc_subnet_app_cidrs}"
+  subnet_data_cidrs = "${var.vpc_subnet_data_cidrs}"
 }
 
 

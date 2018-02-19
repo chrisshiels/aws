@@ -2,18 +2,18 @@ variable "name" {}
 
 variable "cidr" {}
 
-variable "availabilityzones" {
+variable "availability_zones" {
   type = "list"
 }
 
-variable "publicsubnetcidrs" {
+variable "subnet_public_cidrs" {
   type = "list"
 }
 
-variable "appsubnetcidrs" {
+variable "subnet_app_cidrs" {
   type = "list"
 }
 
-variable "datasubnetcidrs" {
+variable "subnet_data_cidrs" {
   type = "list"
 }

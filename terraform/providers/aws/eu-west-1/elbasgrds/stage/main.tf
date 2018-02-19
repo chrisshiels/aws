@@ -20,9 +20,9 @@ module "elbasgrds" {
   env = "stage"
   key_name = "aws"
   vpc_availability_zones = [ "eu-west-1a", "eu-west-1b" ]
-  vpc_public_subnet_cidrs = [ "10.0.1.0/24", "10.0.2.0/24" ]
-  vpc_app_subnet_cidrs = [ "10.0.4.0/24", "10.0.5.0/24" ]
-  vpc_data_subnet_cidrs = [ "10.0.7.0/24", "10.0.8.0/24" ]
+  vpc_subnet_public_cidrs = [ "10.0.1.0/24", "10.0.2.0/24" ]
+  vpc_subnet_app_cidrs = [ "10.0.4.0/24", "10.0.5.0/24" ]
+  vpc_subnet_data_cidrs = [ "10.0.7.0/24", "10.0.8.0/24" ]
   asg_instance_type = "t2.micro"
   asg_min_size = 2
   asg_max_size = 2
