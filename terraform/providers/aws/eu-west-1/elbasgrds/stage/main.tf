@@ -19,6 +19,7 @@ module "elbasgrds" {
   source = "../../../../../stacks/aws/elbasgrds"
   env = "stage"
   key_name = "aws"
+  vpc_cidr = "10.0.0.0/16"
   vpc_availability_zones = [ "eu-west-1a", "eu-west-1b" ]
   vpc_subnet_public_cidrs = [ "10.0.1.0/24", "10.0.2.0/24" ]
   vpc_subnet_app_cidrs = [ "10.0.4.0/24", "10.0.5.0/24" ]

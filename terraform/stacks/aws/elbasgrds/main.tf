@@ -1,7 +1,7 @@
 module "vpc" {
   source = "../../../modules/aws/vpc"
   name = "${var.env}"
-  cidr = "10.0.0.0/16"
+  cidr = "${var.vpc_cidr}"
   availability_zones = "${var.vpc_availability_zones}"
   subnet_public_cidrs = "${var.vpc_subnet_public_cidrs}"
   subnet_app_cidrs = "${var.vpc_subnet_app_cidrs}"
