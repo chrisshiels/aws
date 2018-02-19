@@ -1,11 +1,11 @@
 module "vpc" {
   source = "../../../modules/aws/vpc"
   name = "${var.env}"
-  cidr = "10.0.0.0/16"
-  availabilityzones = "${var.vpc_availability_zones}"
-  publicsubnetcidrs = "${var.vpc_public_subnet_cidrs}"
-  appsubnetcidrs = "${var.vpc_app_subnet_cidrs}"
-  datasubnetcidrs = "${var.vpc_data_subnet_cidrs}"
+  cidr = "${var.vpc_cidr}"
+  availability_zones = "${var.vpc_availability_zones}"
+  subnet_public_cidrs = "${var.vpc_subnet_public_cidrs}"
+  subnet_app_cidrs = "${var.vpc_subnet_app_cidrs}"
+  subnet_data_cidrs = "${var.vpc_subnet_data_cidrs}"
 }
 
 
@@ -63,7 +63,7 @@ module "bastion" {
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
-  instance_type = "t2.micro"
+  instance_type = "${var.bastion_instance_type}"
   associate_public_ip_address = true
   root_block_device_volume_size = 8
 }

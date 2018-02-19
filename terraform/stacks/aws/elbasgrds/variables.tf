@@ -2,21 +2,25 @@ variable "env" {}
 
 variable "key_name" {}
 
+variable "vpc_cidr" {}
+
 variable "vpc_availability_zones" {
   type = "list"
 }
 
-variable "vpc_public_subnet_cidrs" {
+variable "vpc_subnet_public_cidrs" {
   type = "list"
 }
 
-variable "vpc_app_subnet_cidrs" {
+variable "vpc_subnet_app_cidrs" {
   type = "list"
 }
 
-variable "vpc_data_subnet_cidrs" {
+variable "vpc_subnet_data_cidrs" {
   type = "list"
 }
+
+variable "bastion_instance_type" {}
 
 variable "asg_instance_type" {}
 
