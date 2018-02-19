@@ -63,7 +63,7 @@ module "bastion" {
   ami_id = "${data.aws_ami.centos7.id}"
   user_data = "${data.template_file.user-data.rendered}"
   key_name = "${var.key_name}"
-  instance_type = "t2.micro"
+  instance_type = "${var.bastion_instance_type}"
   associate_public_ip_address = true
   root_block_device_volume_size = 8
 }

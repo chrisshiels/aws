@@ -20,6 +20,8 @@ variable "vpc_subnet_data_cidrs" {
   type = "list"
 }
 
+variable "bastion_instance_type" {}
+
 variable "asg_instance_type" {}
 
 variable "asg_min_size" {}
