@@ -31,3 +31,49 @@ variable "max_size" {}
 variable "desired_capacity" {}
 
 variable "bastion_security_group_id" {}
+
+variable "elb_security_group_ids" {
+  type = "list"
+  default = []
+}
+
+variable "elb_security_group_allow_cidrs_len" {
+  default = 0
+}
+
+variable "elb_security_group_allow_cidrs" {
+  type = "list"
+  default = []
+}
+
+variable "elb_security_group_allow_ids_len" {
+  default = 0
+}
+
+variable "elb_security_group_allow_ids" {
+  type = "list"
+  default = []
+}
+
+variable "asg_security_group_ids" {
+  type = "list"
+  default = []
+}
+
+variable "asg_security_group_allow_cidrs_len" {
+  default = 0
+}
+
+variable "asg_security_group_allow_cidrs" {
+  type = "list"
+  default = []
+}
+
+variable "asg_security_group_allow_ids_len" {
+  default = 0
+}
+
+variable "asg_security_group_allow_ids" {
+  type = "list"
+  default = []
+}

@@ -1,5 +1,5 @@
 output "security_group_elb_id" {
-  value = "${aws_security_group.elb.id}"
+  value = "${module.securitygroup-elb.security_group_id}"
 }
 
 output "elb_id" {
@@ -7,7 +7,7 @@ output "elb_id" {
 }
 
 output "security_group_app_id" {
-  value = "${aws_security_group.app.id}"
+  value = "${module.securitygroup-app.security_group_id}"
 }
 
 output "launch_configuration_app_id" {
