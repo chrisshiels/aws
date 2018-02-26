@@ -1,5 +1,5 @@
 output "security_group_id" {
-  value = "${aws_security_group.rds.id}"
+  value = "${module.securitygroup.security_group_id}"
 }
 
 output "db_subnet_group_id" {

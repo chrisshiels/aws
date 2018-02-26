@@ -37,3 +37,26 @@ variable "auto_minor_version_upgrade" {}
 variable "apply_immediately" {}
 
 variable "skip_final_snapshot" {}
+
+variable "security_group_ids" {
+  type = "list"
+  default = []
+}
+
+variable "security_group_allow_cidrs_len" {
+  default = 0
+}
+
+variable "security_group_allow_cidrs" {
+  type = "list"
+  default = []
+}
+
+variable "security_group_allow_ids_len" {
+  default = 0
+}
+
+variable "security_group_allow_ids" {
+  type = "list"
+  default = []
+}

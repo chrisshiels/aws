@@ -1,33 +1,11 @@
-resource "aws_security_group" "rds" {
-  name = "${format("sg_%s_rds", replace(var.name, "-", "_"))}"
-  description = "sg-${var.name}-rds"
+module "securitygroup" {
+  source = "../../../modules/aws/securitygroup"
+  name = "${var.name}-rds"
   vpc_id = "${var.vpc_id}"
-
-  tags {
-    Name = "sg-${var.name}-rds"
-  }
-}
-
-
-resource "aws_security_group_rule" "rds-egress-allall-to-all" {
-  security_group_id = "${aws_security_group.rds.id}"
-  type = "egress"
-  protocol = "all"
-  from_port = 0
-  to_port = 0
-  cidr_blocks = [ "0.0.0.0/0" ]
-  description = "rds-egress-allall-to-all"
-}
-
-
-resource "aws_security_group_rule" "rds-ingress-tcpport-from-all" {
-  security_group_id = "${aws_security_group.rds.id}"
-  type = "ingress"
-  protocol = "tcp"
-  from_port = "${var.port}"
-  to_port = "${var.port}"
-  cidr_blocks = [ "0.0.0.0/0" ]
-  description = "rds-ingress-tcp${var.port}-from-all"
+  security_group_allow_cidrs_len = "${var.security_group_allow_cidrs_len}"
+  security_group_allow_cidrs = [ "${var.security_group_allow_cidrs}" ]
+  security_group_allow_ids_len = "${var.security_group_allow_ids_len}"
+  security_group_allow_ids = [ "${var.security_group_allow_ids}" ]
 }
 
 
@@ -49,7 +27,10 @@ resource "aws_db_instance" "rds" {
   license_model = "${var.license_model}"
   port = "${var.port}"
   publicly_accessible = false
-  vpc_security_group_ids = [ "${aws_security_group.rds.id}" ]
+  vpc_security_group_ids = [
+    "${var.security_group_ids}",
+    "${module.securitygroup.security_group_id}"
+  ]
   db_subnet_group_name = "${aws_db_subnet_group.rds.name}"
   multi_az = "${var.multi_az}"
   instance_class = "${var.instance_class}"
