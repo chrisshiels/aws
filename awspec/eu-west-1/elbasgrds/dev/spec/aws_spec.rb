@@ -209,7 +209,7 @@ describe security_group('sg-dev-app-rds') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
-  its(:inbound) { should be_opened(3306).protocol('tcp').for('0.0.0.0/0') }
+  its(:inbound) { should be_opened(3306).protocol('tcp').for('sg-dev-app') }
 end
 
 
