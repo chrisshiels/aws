@@ -66,6 +66,12 @@ module "bastion" {
   instance_type = "${var.bastion_instance_type}"
   associate_public_ip_address = true
   root_block_device_volume_size = 8
+
+  security_group_ids = []
+  security_group_allow_cidrs_len = 1
+  security_group_allow_cidrs = [
+    "${formatlist("tcp:22:%s", var.bastion_ssh_cidrs)}"
+  ]
 }
 
 
@@ -85,6 +91,16 @@ module "elbasg" {
   max_size = "${var.asg_max_size}"
   desired_capacity = "${var.asg_desired_capacity}"
   bastion_security_group_id = "${module.bastion.security_group_id}"
+
+  elb_security_group_ids = []
+  elb_security_group_allow_cidrs_len = 1
+  elb_security_group_allow_cidrs = [ "tcp:80:0.0.0.0/0" ]
+  asg_security_group_ids = []
+  asg_security_group_allow_ids_len = 2
+  asg_security_group_allow_ids = [
+    "tcp:22:${module.bastion.security_group_id}",
+    "tcp:80:${module.bastion.security_group_id}"
+  ]
 }
 
 
@@ -109,4 +125,10 @@ module "rds" {
   auto_minor_version_upgrade = false
   apply_immediately = false
   skip_final_snapshot = true
+
+  security_group_ids = []
+  security_group_allow_ids_len = 1
+  security_group_allow_ids = [
+    "tcp:3306:${module.elbasg.security_group_app_id}"
+  ]
 }
