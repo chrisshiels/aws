@@ -136,6 +136,7 @@ describe ec2('dev-bastion') do
   it { should be_running }
   its(:instance_type) { should eq 't2.micro' }
   it { should have_security_group('sg-dev-bastion') }
+  it { should have_security_group('sg-dev-all') }
   it { should belong_to_vpc('vpc-dev') }
   it { should belong_to_subnet('sn-dev-public-1a') }
   it { should have_ebs('dev-bastion') }
@@ -160,6 +161,7 @@ describe elb('elb-dev-app') do
   it { should have_subnet('sn-dev-public-1a') }
   it { should have_subnet('sn-dev-public-1b') }
   it { should have_security_group('sg-dev-app-elb') }
+  it { should have_security_group('sg-dev-all') }
   it { should have_listener(protocol: 'HTTP',
 			    port: 80,
 			    instance_protocol: 'HTTP',
@@ -186,6 +188,7 @@ describe launch_configuration('asglc-dev-app') do
   it { should exist }
   its(:instance_type) { should eq 't2.micro' }
   it { should have_security_group('sg-dev-app') }
+  it { should have_security_group('sg-dev-all') }
   its(:associate_public_ip_address) { should eq nil }
   its(:key_name) { should eq 'aws' }
   its(:iam_instance_profile) { should eq 'instanceprofile-dev-instance' }
@@ -222,6 +225,7 @@ describe rds('rds-dev-app') do
   its('resource.endpoint.port') { should eq 3306 }
   its(:publicly_accessible) { should eq false }
   it { should have_security_group('sg-dev-app-rds') }
+  it { should have_security_group('sg-dev-all') }
   it { should belong_to_db_subnet_group('dbsg-dev-app') }
   it { should belong_to_vpc('vpc-dev') }
   its(:multi_az) { should eq false }
