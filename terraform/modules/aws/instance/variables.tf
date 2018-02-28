@@ -19,3 +19,26 @@ variable "instance_type" {}
 variable "associate_public_ip_address" {}
 
 variable "root_block_device_volume_size" {}
+
+variable "security_group_ids" {
+  type = "list"
+  default = []
+}
+
+variable "security_group_allow_cidrs_len" {
+  default = 0
+}
+
+variable "security_group_allow_cidrs" {
+  type = "list"
+  default = []
+}
+
+variable "security_group_allow_ids_len" {
+  default = 0
+}
+
+variable "security_group_allow_ids" {
+  type = "list"
+  default = []
+}

@@ -22,6 +22,10 @@ variable "vpc_subnet_data_cidrs" {
 
 variable "bastion_instance_type" {}
 
+variable "bastion_ssh_cidrs" {
+  type = "list"
+}
+
 variable "asg_instance_type" {}
 
 variable "asg_min_size" {}

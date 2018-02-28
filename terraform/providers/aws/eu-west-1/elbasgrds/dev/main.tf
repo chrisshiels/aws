@@ -25,6 +25,7 @@ module "elbasgrds" {
   vpc_subnet_app_cidrs = [ "10.0.4.0/24", "10.0.5.0/24" ]
   vpc_subnet_data_cidrs = [ "10.0.7.0/24", "10.0.8.0/24" ]
   bastion_instance_type = "t2.micro"
+  bastion_ssh_cidrs = [ "0.0.0.0/0" ]
   asg_instance_type = "t2.micro"
   asg_min_size = 2
   asg_max_size = 2
