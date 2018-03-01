@@ -87,28 +87,26 @@ module "elbasg" {
   source = "../../../modules/aws/elbasg"
   name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
-  subnet_public_ids = "${module.vpc.subnet_public_ids}"
-  subnet_app_ids = "${module.vpc.subnet_app_ids}"
-  nat_gateway_ids = "${module.vpc.nat_gateway_ids}"
-  instance_profile_id = "${module.instanceprofile.instance_profile_id}"
-  ami_id = "${data.aws_ami.centos7.id}"
-  user_data = "${data.template_file.user-data.rendered}"
-  key_name = "${var.key_name}"
-  instance_type = "${var.asg_instance_type}"
-  min_size = "${var.asg_min_size}"
-  max_size = "${var.asg_max_size}"
-  desired_capacity = "${var.asg_desired_capacity}"
-  bastion_security_group_id = "${module.bastion.security_group_id}"
-
+  elb_subnet_ids = "${module.vpc.subnet_public_ids}"
   elb_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
-  elb_security_group_allow_cidrs_len = 1
-  elb_security_group_allow_cidrs = [ "tcp:80:0.0.0.0/0" ]
-  asg_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
-  asg_security_group_allow_ids_len = 2
-  asg_security_group_allow_ids = [
+  elb_sg_allow_cidrs_len = 1
+  elb_sg_allow_cidrs = [ "tcp:80:0.0.0.0/0" ]
+  asglc_instance_profile_id = "${module.instanceprofile.instance_profile_id}"
+  asglc_ami_id = "${data.aws_ami.centos7.id}"
+  asglc_user_data = "${data.template_file.user-data.rendered}"
+  asglc_key_name = "${var.key_name}"
+  asglc_instance_type = "${var.asg_instance_type}"
+  asglc_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
+  asglc_sg_allow_ids_len = 2
+  asglc_sg_allow_ids = [
     "tcp:22:${module.bastion.security_group_id}",
     "tcp:80:${module.bastion.security_group_id}"
   ]
+  asg_subnet_ids = "${module.vpc.subnet_app_ids}"
+  asg_nat_gateway_ids = "${module.vpc.nat_gateway_ids}"
+  asg_min_size = "${var.asg_min_size}"
+  asg_max_size = "${var.asg_max_size}"
+  asg_desired_capacity = "${var.asg_desired_capacity}"
 }
 
 

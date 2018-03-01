@@ -2,17 +2,17 @@ module "securitygroup-elb" {
   source = "../../../modules/aws/securitygroup"
   name = "${var.name}-elb"
   vpc_id = "${var.vpc_id}"
-  security_group_allow_cidrs_len = "${var.elb_security_group_allow_cidrs_len}"
-  security_group_allow_cidrs = [ "${var.elb_security_group_allow_cidrs}" ]
-  security_group_allow_ids_len = "${var.elb_security_group_allow_ids_len}"
-  security_group_allow_ids = [ "${var.elb_security_group_allow_ids}" ]
+  sg_allow_cidrs_len = "${var.elb_sg_allow_cidrs_len}"
+  sg_allow_cidrs = [ "${var.elb_sg_allow_cidrs}" ]
+  sg_allow_ids_len = "${var.elb_sg_allow_ids_len}"
+  sg_allow_ids = [ "${var.elb_sg_allow_ids}" ]
 }
 
 
 resource "aws_elb" "elb" {
   name = "elb-${var.name}"
   internal = false
-  subnets = [ "${var.subnet_public_ids}" ]
+  subnets = [ "${var.elb_subnet_ids}" ]
   security_groups = [
     "${var.elb_security_group_ids}",
     "${module.securitygroup-elb.security_group_id}"
@@ -47,11 +47,11 @@ module "securitygroup-app" {
   source = "../../../modules/aws/securitygroup"
   name = "${var.name}"
   vpc_id = "${var.vpc_id}"
-  security_group_allow_cidrs_len = "${var.asg_security_group_allow_cidrs_len}"
-  security_group_allow_cidrs = [ "${var.asg_security_group_allow_cidrs}" ]
-  security_group_allow_ids_len = "${var.asg_security_group_allow_ids_len + 1}"
-  security_group_allow_ids = [
-    "${var.asg_security_group_allow_ids}",
+  sg_allow_cidrs_len = "${var.asglc_sg_allow_cidrs_len}"
+  sg_allow_cidrs = [ "${var.asglc_sg_allow_cidrs}" ]
+  sg_allow_ids_len = "${var.asglc_sg_allow_ids_len + 1}"
+  sg_allow_ids = [
+    "${var.asglc_sg_allow_ids}",
     "tcp:80:${module.securitygroup-elb.security_group_id}"
   ]
 }
@@ -59,17 +59,17 @@ module "securitygroup-app" {
 
 resource "aws_launch_configuration" "app" {
   name = "asglc-${var.name}"
-  image_id = "${var.ami_id}"
-  instance_type = "${var.instance_type}"
+  image_id = "${var.asglc_ami_id}"
+  instance_type = "${var.asglc_instance_type}"
   security_groups = [
-    "${var.asg_security_group_ids}",
+    "${var.asglc_security_group_ids}",
     "${module.securitygroup-app.security_group_id}"
   ]
   associate_public_ip_address = false
-  key_name = "${var.key_name}"
+  key_name = "${var.asglc_key_name}"
   enable_monitoring = false
-  user_data = "${var.user_data}"
-  iam_instance_profile = "${var.instance_profile_id}"
+  user_data = "${var.asglc_user_data}"
+  iam_instance_profile = "${var.asglc_instance_profile_id}"
 
   root_block_device {
     volume_type = "gp2"
@@ -82,11 +82,11 @@ resource "aws_launch_configuration" "app" {
 resource "aws_autoscaling_group" "app" {
   name = "asg-${var.name}"
   launch_configuration = "${aws_launch_configuration.app.name}"
-  vpc_zone_identifier = [ "${var.subnet_app_ids}" ]
+  vpc_zone_identifier = [ "${var.asg_subnet_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
-  min_size = "${var.min_size}"
-  max_size = "${var.max_size}"
-  desired_capacity = "${var.desired_capacity}"
+  min_size = "${var.asg_min_size}"
+  max_size = "${var.asg_max_size}"
+  desired_capacity = "${var.asg_desired_capacity}"
   default_cooldown = 30
   health_check_grace_period = 60
   health_check_type = "EC2"
@@ -100,7 +100,7 @@ resource "aws_autoscaling_group" "app" {
 
   tag {
     key = "TerraformDependsOn"
-    value = "${join(",", var.nat_gateway_ids)}"
+    value = "${join(",", var.asg_nat_gateway_ids)}"
     propagate_at_launch = true
   }
 }
