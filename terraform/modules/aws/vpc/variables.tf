@@ -1,19 +1,19 @@
 variable "name" {}
 
-variable "cidr" {}
+variable "vpc_cidr" {}
 
-variable "availability_zones" {
+variable "vpc_availability_zones" {
   type = "list"
 }
 
-variable "subnet_public_cidrs" {
+variable "vpc_subnet_public_cidrs" {
   type = "list"
 }
 
-variable "subnet_app_cidrs" {
+variable "vpc_subnet_app_cidrs" {
   type = "list"
 }
 
-variable "subnet_data_cidrs" {
+variable "vpc_subnet_data_cidrs" {
   type = "list"
 }
