@@ -2,61 +2,61 @@ variable "name" {}
 
 variable "vpc_id" {}
 
-variable "subnet_ids" {
+variable "dbsg_subnet_ids" {
   type = "list"
 }
 
-variable "engine" {}
+variable "db_engine" {}
 
-variable "engine_version" {}
+variable "db_engine_version" {}
 
-variable "license_model" {}
+variable "db_license_model" {}
 
-variable "port" {}
+variable "db_port" {}
 
-variable "multi_az" {}
+variable "db_multi_az" {}
 
-variable "instance_class" {}
+variable "db_instance_class" {}
 
-variable "allocated_storage" {}
+variable "db_allocated_storage" {}
 
-variable "username" {}
+variable "db_username" {}
 
-variable "password" {}
+variable "db_password" {}
 
-variable "schema_name" {}
+variable "db_schema_name" {}
 
-variable "backup_window" {}
+variable "db_backup_window" {}
 
-variable "backup_retention_period" {}
+variable "db_backup_retention_period" {}
 
-variable "maintenance_window" {}
+variable "db_maintenance_window" {}
 
-variable "auto_minor_version_upgrade" {}
+variable "db_auto_minor_version_upgrade" {}
 
-variable "apply_immediately" {}
+variable "db_apply_immediately" {}
 
-variable "skip_final_snapshot" {}
+variable "db_skip_final_snapshot" {}
 
-variable "security_group_ids" {
-  type = "list"
-  default = []
-}
-
-variable "security_group_allow_cidrs_len" {
-  default = 0
-}
-
-variable "security_group_allow_cidrs" {
+variable "db_security_group_ids" {
   type = "list"
   default = []
 }
 
-variable "security_group_allow_ids_len" {
+variable "sg_allow_cidrs_len" {
   default = 0
 }
 
-variable "security_group_allow_ids" {
+variable "sg_allow_cidrs" {
+  type = "list"
+  default = []
+}
+
+variable "sg_allow_ids_len" {
+  default = 0
+}
+
+variable "sg_allow_ids" {
   type = "list"
   default = []
 }

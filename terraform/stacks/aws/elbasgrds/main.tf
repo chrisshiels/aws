@@ -114,27 +114,26 @@ module "rds" {
   source = "../../../modules/aws/rds"
   name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
-  subnet_ids = "${module.vpc.subnet_data_ids}"
-  engine = "mysql"
-  engine_version = "5.7.19"
-  license_model = "general-public-license"
-  port = 3306
-  multi_az = "${var.rds_multi_az}"
-  instance_class = "${var.rds_instance_class}"
-  allocated_storage = "${var.rds_allocated_storage}"
-  username = "admin"
-  password = "adminadmin"
-  schema_name = "db"
-  backup_window = "${var.rds_backup_window}"
-  backup_retention_period = "${var.rds_backup_retention_period}"
-  maintenance_window = "${var.rds_maintenance_window}"
-  auto_minor_version_upgrade = false
-  apply_immediately = false
-  skip_final_snapshot = true
-
-  security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
-  security_group_allow_ids_len = 1
-  security_group_allow_ids = [
+  dbsg_subnet_ids = "${module.vpc.subnet_data_ids}"
+  db_engine = "mysql"
+  db_engine_version = "5.7.19"
+  db_license_model = "general-public-license"
+  db_port = 3306
+  db_multi_az = "${var.db_multi_az}"
+  db_instance_class = "${var.db_instance_class}"
+  db_allocated_storage = "${var.db_allocated_storage}"
+  db_username = "admin"
+  db_password = "adminadmin"
+  db_schema_name = "db"
+  db_backup_window = "${var.db_backup_window}"
+  db_backup_retention_period = "${var.db_backup_retention_period}"
+  db_maintenance_window = "${var.db_maintenance_window}"
+  db_auto_minor_version_upgrade = false
+  db_apply_immediately = false
+  db_skip_final_snapshot = true
+  db_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
+  sg_allow_ids_len = 1
+  sg_allow_ids = [
     "tcp:3306:${module.elbasg.security_group_app_id}"
   ]
 }

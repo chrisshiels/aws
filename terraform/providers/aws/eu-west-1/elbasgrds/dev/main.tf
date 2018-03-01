@@ -30,10 +30,10 @@ module "elbasgrds" {
   asg_min_size = 2
   asg_max_size = 2
   asg_desired_capacity = 2
-  rds_multi_az = false
-  rds_instance_class = "db.t2.micro"
-  rds_allocated_storage = 5
-  rds_backup_window = "01:00-03:00"
-  rds_backup_retention_period = 7
-  rds_maintenance_window = "mon:04:00-mon:06:00"
+  db_multi_az = false
+  db_instance_class = "db.t2.micro"
+  db_allocated_storage = 5
+  db_backup_window = "01:00-03:00"
+  db_backup_retention_period = 7
+  db_maintenance_window = "mon:04:00-mon:06:00"
 }
