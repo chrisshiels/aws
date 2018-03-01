@@ -64,19 +64,20 @@ module "bastion" {
   source = "../../../modules/aws/instance"
   name = "${var.env}-bastion"
   vpc_id = "${module.vpc.vpc_id}"
-  subnet_public_id = "${element(module.vpc.subnet_public_ids, 0)}"
-  internet_gateway_id = "${module.vpc.internet_gateway_id}"
-  instance_profile_id = "${module.instanceprofile.instance_profile_id}"
-  ami_id = "${data.aws_ami.centos7.id}"
-  user_data = "${data.template_file.user-data.rendered}"
-  key_name = "${var.key_name}"
-  instance_type = "${var.bastion_instance_type}"
-  associate_public_ip_address = true
-  root_block_device_volume_size = 8
-
-  security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
-  security_group_allow_cidrs_len = 1
-  security_group_allow_cidrs = [
+  instance_subnet_id = "${element(module.vpc.subnet_public_ids, 0)}"
+  instance_internet_gateway_id = "${module.vpc.internet_gateway_id}"
+  instance_instance_profile_id = "${module.instanceprofile.instance_profile_id}"
+  instance_ami_id = "${data.aws_ami.centos7.id}"
+  instance_user_data = "${data.template_file.user-data.rendered}"
+  instance_key_name = "${var.key_name}"
+  instance_instance_type = "${var.bastion_instance_type}"
+  instance_associate_public_ip_address = true
+  instance_root_block_device_volume_size = 8
+  instance_security_group_ids = [
+    "${module.securitygroup-all.security_group_id}"
+  ]
+  sg_allow_cidrs_len = 1
+  sg_allow_cidrs = [
     "${formatlist("tcp:22:%s", var.bastion_ssh_cidrs)}"
   ]
 }
