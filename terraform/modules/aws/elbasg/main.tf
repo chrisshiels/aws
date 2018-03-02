@@ -43,7 +43,7 @@ resource "aws_elb" "elb" {
 }
 
 
-module "securitygroup-app" {
+module "securitygroup-asglc" {
   source = "../../../modules/aws/securitygroup"
   name = "${var.name}"
   vpc_id = "${var.vpc_id}"
@@ -57,13 +57,13 @@ module "securitygroup-app" {
 }
 
 
-resource "aws_launch_configuration" "app" {
+resource "aws_launch_configuration" "asglc" {
   name = "asglc-${var.name}"
   image_id = "${var.asglc_ami_id}"
   instance_type = "${var.asglc_instance_type}"
   security_groups = [
     "${var.asglc_security_group_ids}",
-    "${module.securitygroup-app.security_group_id}"
+    "${module.securitygroup-asglc.security_group_id}"
   ]
   associate_public_ip_address = false
   key_name = "${var.asglc_key_name}"
@@ -79,9 +79,9 @@ resource "aws_launch_configuration" "app" {
 }
 
 
-resource "aws_autoscaling_group" "app" {
+resource "aws_autoscaling_group" "asg" {
   name = "asg-${var.name}"
-  launch_configuration = "${aws_launch_configuration.app.name}"
+  launch_configuration = "${aws_launch_configuration.asglc.name}"
   vpc_zone_identifier = [ "${var.asg_subnet_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
   min_size = "${var.asg_min_size}"
