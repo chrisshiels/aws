@@ -90,7 +90,9 @@ module "elbasg" {
   elb_subnet_ids = "${module.vpc.subnet_public_ids}"
   elb_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   elb_sg_allow_cidrs_len = 1
-  elb_sg_allow_cidrs = [ "tcp:80:0.0.0.0/0" ]
+  elb_sg_allow_cidrs = [
+    "${formatlist("tcp:80:%s", var.elb_http_cidrs)}"
+  ]
   asglc_instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   asglc_ami_id = "${data.aws_ami.centos7.id}"
   asglc_user_data = "${data.template_file.user-data.rendered}"

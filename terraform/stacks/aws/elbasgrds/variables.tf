@@ -26,6 +26,10 @@ variable "bastion_ssh_cidrs" {
   type = "list"
 }
 
+variable "elb_http_cidrs" {
+  type = "list"
+}
+
 variable "asglc_instance_type" {}
 
 variable "asg_min_size" {}
