@@ -34,14 +34,14 @@ variable "asg_max_size" {}
 
 variable "asg_desired_capacity" {}
 
-variable "rds_multi_az" {}
+variable "db_multi_az" {}
 
-variable "rds_instance_class" {}
+variable "db_instance_class" {}
 
-variable "rds_allocated_storage" {}
+variable "db_allocated_storage" {}
 
-variable "rds_backup_window" {}
+variable "db_backup_window" {}
 
-variable "rds_backup_retention_period" {}
+variable "db_backup_retention_period" {}
 
-variable "rds_maintenance_window" {}
+variable "db_maintenance_window" {}
