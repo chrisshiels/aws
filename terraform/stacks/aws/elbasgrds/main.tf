@@ -89,6 +89,11 @@ module "elbasg" {
   vpc_id = "${module.vpc.vpc_id}"
   elb_internal = false
   elb_subnet_ids = "${module.vpc.subnet_public_ids}"
+  elb_loadbalancer_protocol = "http"
+  elb_loadbalancer_port = 80
+  elb_server_protocol = "http"
+  elb_server_port = 80
+  elb_health_check_target = "HTTP:80/"
   elb_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   elb_sg_allow_cidrs_len = 1
   elb_sg_allow_cidrs = [

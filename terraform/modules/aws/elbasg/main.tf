@@ -23,14 +23,14 @@ resource "aws_elb" "elb" {
   connection_draining_timeout = 300
 
   listener {
-    lb_protocol = "http"
-    lb_port = 80
-    instance_protocol = "http"
-    instance_port = 80
+    lb_protocol = "${var.elb_loadbalancer_protocol}"
+    lb_port = "${var.elb_loadbalancer_port}"
+    instance_protocol = "${var.elb_server_protocol}"
+    instance_port = "${var.elb_server_port}"
   }
 
   health_check {
-    target = "HTTP:80/"
+    target = "${var.elb_health_check_target}"
     interval = 30
     healthy_threshold = 2
     unhealthy_threshold = 2
@@ -52,7 +52,7 @@ module "securitygroup-asglc" {
   sg_allow_ids_len = "${var.asglc_sg_allow_ids_len + 1}"
   sg_allow_ids = [
     "${var.asglc_sg_allow_ids}",
-    "tcp:80:${module.securitygroup-elb.security_group_id}"
+    "tcp:${var.elb_server_port}:${module.securitygroup-elb.security_group_id}"
   ]
 }
 
