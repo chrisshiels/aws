@@ -11,7 +11,7 @@ module "securitygroup-elb" {
 
 resource "aws_elb" "elb" {
   name = "elb-${var.name}"
-  internal = false
+  internal = "${var.elb_internal}"
   subnets = [ "${var.elb_subnet_ids}" ]
   security_groups = [
     "${var.elb_security_group_ids}",

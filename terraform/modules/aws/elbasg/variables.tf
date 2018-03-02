@@ -2,6 +2,8 @@ variable "name" {}
 
 variable "vpc_id" {}
 
+variable "elb_internal" {}
+
 variable "elb_subnet_ids" {
   type = "list"
 }

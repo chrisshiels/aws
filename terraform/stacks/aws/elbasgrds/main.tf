@@ -87,6 +87,7 @@ module "elbasg" {
   source = "../../../modules/aws/elbasg"
   name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
+  elb_internal = false
   elb_subnet_ids = "${module.vpc.subnet_public_ids}"
   elb_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   elb_sg_allow_cidrs_len = 1
