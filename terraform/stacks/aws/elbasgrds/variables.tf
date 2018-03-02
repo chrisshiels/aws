@@ -26,7 +26,7 @@ variable "bastion_ssh_cidrs" {
   type = "list"
 }
 
-variable "asg_instance_type" {}
+variable "asglc_instance_type" {}
 
 variable "asg_min_size" {}
 

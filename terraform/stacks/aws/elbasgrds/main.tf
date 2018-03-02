@@ -95,7 +95,7 @@ module "elbasg" {
   asglc_ami_id = "${data.aws_ami.centos7.id}"
   asglc_user_data = "${data.template_file.user-data.rendered}"
   asglc_key_name = "${var.key_name}"
-  asglc_instance_type = "${var.asg_instance_type}"
+  asglc_instance_type = "${var.asglc_instance_type}"
   asglc_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   asglc_sg_allow_ids_len = 2
   asglc_sg_allow_ids = [
