@@ -2,9 +2,21 @@ variable "name" {}
 
 variable "vpc_id" {}
 
+variable "elb_internal" {}
+
 variable "elb_subnet_ids" {
   type = "list"
 }
+
+variable "elb_loadbalancer_protocol" {}
+
+variable "elb_loadbalancer_port" {}
+
+variable "elb_server_protocol" {}
+
+variable "elb_server_port" {}
+
+variable "elb_health_check_target" {}
 
 variable "elb_security_group_ids" {
   type = "list"

@@ -11,7 +11,7 @@ module "securitygroup-elb" {
 
 resource "aws_elb" "elb" {
   name = "elb-${var.name}"
-  internal = false
+  internal = "${var.elb_internal}"
   subnets = [ "${var.elb_subnet_ids}" ]
   security_groups = [
     "${var.elb_security_group_ids}",
@@ -23,14 +23,14 @@ resource "aws_elb" "elb" {
   connection_draining_timeout = 300
 
   listener {
-    lb_protocol = "http"
-    lb_port = 80
-    instance_protocol = "http"
-    instance_port = 80
+    lb_protocol = "${var.elb_loadbalancer_protocol}"
+    lb_port = "${var.elb_loadbalancer_port}"
+    instance_protocol = "${var.elb_server_protocol}"
+    instance_port = "${var.elb_server_port}"
   }
 
   health_check {
-    target = "HTTP:80/"
+    target = "${var.elb_health_check_target}"
     interval = 30
     healthy_threshold = 2
     unhealthy_threshold = 2
@@ -43,7 +43,7 @@ resource "aws_elb" "elb" {
 }
 
 
-module "securitygroup-app" {
+module "securitygroup-asglc" {
   source = "../../../modules/aws/securitygroup"
   name = "${var.name}"
   vpc_id = "${var.vpc_id}"
@@ -52,18 +52,18 @@ module "securitygroup-app" {
   sg_allow_ids_len = "${var.asglc_sg_allow_ids_len + 1}"
   sg_allow_ids = [
     "${var.asglc_sg_allow_ids}",
-    "tcp:80:${module.securitygroup-elb.security_group_id}"
+    "tcp:${var.elb_server_port}:${module.securitygroup-elb.security_group_id}"
   ]
 }
 
 
-resource "aws_launch_configuration" "app" {
+resource "aws_launch_configuration" "asglc" {
   name = "asglc-${var.name}"
   image_id = "${var.asglc_ami_id}"
   instance_type = "${var.asglc_instance_type}"
   security_groups = [
     "${var.asglc_security_group_ids}",
-    "${module.securitygroup-app.security_group_id}"
+    "${module.securitygroup-asglc.security_group_id}"
   ]
   associate_public_ip_address = false
   key_name = "${var.asglc_key_name}"
@@ -79,9 +79,9 @@ resource "aws_launch_configuration" "app" {
 }
 
 
-resource "aws_autoscaling_group" "app" {
+resource "aws_autoscaling_group" "asg" {
   name = "asg-${var.name}"
-  launch_configuration = "${aws_launch_configuration.app.name}"
+  launch_configuration = "${aws_launch_configuration.asglc.name}"
   vpc_zone_identifier = [ "${var.asg_subnet_ids}" ]
   load_balancers = [ "${aws_elb.elb.id}" ]
   min_size = "${var.asg_min_size}"

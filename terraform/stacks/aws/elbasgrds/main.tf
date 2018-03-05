@@ -87,15 +87,23 @@ module "elbasg" {
   source = "../../../modules/aws/elbasg"
   name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
+  elb_internal = false
   elb_subnet_ids = "${module.vpc.subnet_public_ids}"
+  elb_loadbalancer_protocol = "http"
+  elb_loadbalancer_port = 80
+  elb_server_protocol = "http"
+  elb_server_port = 80
+  elb_health_check_target = "HTTP:80/"
   elb_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   elb_sg_allow_cidrs_len = 1
-  elb_sg_allow_cidrs = [ "tcp:80:0.0.0.0/0" ]
+  elb_sg_allow_cidrs = [
+    "${formatlist("tcp:80:%s", var.elb_http_cidrs)}"
+  ]
   asglc_instance_profile_id = "${module.instanceprofile.instance_profile_id}"
   asglc_ami_id = "${data.aws_ami.centos7.id}"
   asglc_user_data = "${data.template_file.user-data.rendered}"
   asglc_key_name = "${var.key_name}"
-  asglc_instance_type = "${var.asg_instance_type}"
+  asglc_instance_type = "${var.asglc_instance_type}"
   asglc_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   asglc_sg_allow_ids_len = 2
   asglc_sg_allow_ids = [
@@ -134,6 +142,6 @@ module "rds" {
   db_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   sg_allow_ids_len = 1
   sg_allow_ids = [
-    "tcp:3306:${module.elbasg.security_group_app_id}"
+    "tcp:3306:${module.elbasg.security_group_asglc_id}"
   ]
 }
