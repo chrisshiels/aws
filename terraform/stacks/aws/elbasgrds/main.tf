@@ -127,6 +127,8 @@ module "rds" {
   db_engine_version = "5.7.19"
   db_license_model = "general-public-license"
   db_port = 3306
+  db_option_group_name = "default:mysql-5-7"
+  db_parameter_group_name = "default.mysql5.7"
   db_multi_az = "${var.db_multi_az}"
   db_instance_class = "${var.db_instance_class}"
   db_allocated_storage = "${var.db_allocated_storage}"

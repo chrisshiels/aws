@@ -32,6 +32,8 @@ resource "aws_db_instance" "rds" {
     "${module.securitygroup.security_group_id}"
   ]
   db_subnet_group_name = "${aws_db_subnet_group.rds.name}"
+  option_group_name = "${var.db_option_group_name}"
+  parameter_group_name = "${var.db_parameter_group_name}"
   multi_az = "${var.db_multi_az}"
   instance_class = "${var.db_instance_class}"
   allocated_storage = "${var.db_allocated_storage}"
