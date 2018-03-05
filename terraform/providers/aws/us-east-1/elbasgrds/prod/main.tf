@@ -34,6 +34,8 @@ module "elbasgrds" {
   db_multi_az = true
   db_instance_class = "db.t2.micro"
   db_allocated_storage = 5
+  db_username = "admin"
+  db_password = "adminadmin"
   db_backup_window = "01:00-03:00"
   db_backup_retention_period = 7
   db_maintenance_window = "mon:04:00-mon:06:00"
