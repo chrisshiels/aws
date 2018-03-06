@@ -1,4 +1,4 @@
-output "security_group_id" {
+output "sg_id" {
   value = "${module.securitygroup.security_group_id}"
 }
 
