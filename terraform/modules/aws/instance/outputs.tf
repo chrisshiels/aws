@@ -1,5 +1,5 @@
 output "sg_id" {
-  value = "${module.securitygroup.security_group_id}"
+  value = "${module.securitygroup.sg_id}"
 }
 
 output "instance_id" {

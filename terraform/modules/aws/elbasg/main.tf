@@ -15,7 +15,7 @@ resource "aws_elb" "elb" {
   subnets = [ "${var.elb_subnet_ids}" ]
   security_groups = [
     "${var.elb_security_group_ids}",
-    "${module.securitygroup-elb.security_group_id}"
+    "${module.securitygroup-elb.sg_id}"
   ]
   cross_zone_load_balancing = true
   idle_timeout = 60
@@ -52,7 +52,7 @@ module "securitygroup-asglc" {
   sg_allow_ids_len = "${var.asglc_sg_allow_ids_len + 1}"
   sg_allow_ids = [
     "${var.asglc_sg_allow_ids}",
-    "tcp:${var.elb_server_port}:${module.securitygroup-elb.security_group_id}"
+    "tcp:${var.elb_server_port}:${module.securitygroup-elb.sg_id}"
   ]
 }
 
@@ -63,7 +63,7 @@ resource "aws_launch_configuration" "asglc" {
   instance_type = "${var.asglc_instance_type}"
   security_groups = [
     "${var.asglc_security_group_ids}",
-    "${module.securitygroup-asglc.security_group_id}"
+    "${module.securitygroup-asglc.sg_id}"
   ]
   associate_public_ip_address = false
   key_name = "${var.asglc_key_name}"

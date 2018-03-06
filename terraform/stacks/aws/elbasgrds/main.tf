@@ -74,7 +74,7 @@ module "bastion" {
   instance_associate_public_ip_address = true
   instance_root_block_device_volume_size = 8
   instance_security_group_ids = [
-    "${module.securitygroup-all.security_group_id}"
+    "${module.securitygroup-all.sg_id}"
   ]
   sg_allow_cidrs_len = 1
   sg_allow_cidrs = [
@@ -94,7 +94,7 @@ module "elbasg" {
   elb_server_protocol = "http"
   elb_server_port = 80
   elb_health_check_target = "HTTP:80/"
-  elb_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
+  elb_security_group_ids = [ "${module.securitygroup-all.sg_id}" ]
   elb_sg_allow_cidrs_len = 1
   elb_sg_allow_cidrs = [
     "${formatlist("tcp:80:%s", var.elb_http_cidrs)}"
@@ -104,7 +104,7 @@ module "elbasg" {
   asglc_user_data = "${data.template_file.user-data.rendered}"
   asglc_key_name = "${var.key_name}"
   asglc_instance_type = "${var.asglc_instance_type}"
-  asglc_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
+  asglc_security_group_ids = [ "${module.securitygroup-all.sg_id}" ]
   asglc_sg_allow_ids_len = 2
   asglc_sg_allow_ids = [
     "tcp:22:${module.bastion.sg_id}",
@@ -141,7 +141,7 @@ module "rds" {
   db_auto_minor_version_upgrade = false
   db_apply_immediately = false
   db_skip_final_snapshot = true
-  db_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
+  db_security_group_ids = [ "${module.securitygroup-all.sg_id}" ]
   sg_allow_ids_len = 1
   sg_allow_ids = [
     "tcp:3306:${module.elbasg.asglc_sg_id}"

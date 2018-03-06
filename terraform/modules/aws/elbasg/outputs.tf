@@ -1,5 +1,5 @@
 output "elb_sg_id" {
-  value = "${module.securitygroup-elb.security_group_id}"
+  value = "${module.securitygroup-elb.sg_id}"
 }
 
 output "elb_id" {
@@ -7,7 +7,7 @@ output "elb_id" {
 }
 
 output "asglc_sg_id" {
-  value = "${module.securitygroup-asglc.security_group_id}"
+  value = "${module.securitygroup-asglc.sg_id}"
 }
 
 output "asglc_id" {
