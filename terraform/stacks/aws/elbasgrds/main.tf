@@ -66,7 +66,7 @@ module "bastion" {
   vpc_id = "${module.vpc.vpc_id}"
   instance_subnet_id = "${element(module.vpc.subnet_public_ids, 0)}"
   instance_internet_gateway_id = "${module.vpc.internet_gateway_id}"
-  instance_instance_profile_id = "${module.instanceprofile.instance_profile_id}"
+  instance_instance_profile_id = "${module.instanceprofile.instanceprofile_id}"
   instance_ami_id = "${data.aws_ami.centos7.id}"
   instance_user_data = "${data.template_file.user-data.rendered}"
   instance_key_name = "${var.key_name}"
@@ -99,7 +99,7 @@ module "elbasg" {
   elb_sg_allow_cidrs = [
     "${formatlist("tcp:80:%s", var.elb_http_cidrs)}"
   ]
-  asglc_instance_profile_id = "${module.instanceprofile.instance_profile_id}"
+  asglc_instance_profile_id = "${module.instanceprofile.instanceprofile_id}"
   asglc_ami_id = "${data.aws_ami.centos7.id}"
   asglc_user_data = "${data.template_file.user-data.rendered}"
   asglc_key_name = "${var.key_name}"
