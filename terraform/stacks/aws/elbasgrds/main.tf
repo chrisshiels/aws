@@ -107,8 +107,8 @@ module "elbasg" {
   asglc_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   asglc_sg_allow_ids_len = 2
   asglc_sg_allow_ids = [
-    "tcp:22:${module.bastion.security_group_id}",
-    "tcp:80:${module.bastion.security_group_id}"
+    "tcp:22:${module.bastion.sg_id}",
+    "tcp:80:${module.bastion.sg_id}"
   ]
   asg_subnet_ids = "${module.vpc.subnet_app_ids}"
   asg_nat_gateway_ids = "${module.vpc.nat_gateway_ids}"
