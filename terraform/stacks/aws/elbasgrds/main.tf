@@ -144,6 +144,6 @@ module "rds" {
   db_security_group_ids = [ "${module.securitygroup-all.security_group_id}" ]
   sg_allow_ids_len = 1
   sg_allow_ids = [
-    "tcp:3306:${module.elbasg.security_group_asglc_id}"
+    "tcp:3306:${module.elbasg.asglc_sg_id}"
   ]
 }
