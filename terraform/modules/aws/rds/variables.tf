@@ -14,6 +14,10 @@ variable "db_license_model" {}
 
 variable "db_port" {}
 
+variable "db_option_group_name" {}
+
+variable "db_parameter_group_name" {}
+
 variable "db_multi_az" {}
 
 variable "db_instance_class" {}
