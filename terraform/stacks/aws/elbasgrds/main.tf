@@ -122,7 +122,7 @@ module "rds" {
   source = "../../../modules/aws/rds"
   name = "${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
-  dbsg_subnet_ids = "${module.vpc.subnet_data_ids}"
+  dbsng_subnet_ids = "${module.vpc.subnet_data_ids}"
   db_engine = "mysql"
   db_engine_version = "5.7.19"
   db_license_model = "general-public-license"

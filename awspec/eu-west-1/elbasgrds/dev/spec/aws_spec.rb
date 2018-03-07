@@ -208,7 +208,7 @@ describe autoscaling_group('asg-dev-app') do
 end
 
 
-describe security_group('sg-dev-app-rds') do
+describe security_group('sg-dev-app-db') do
   it { should exist }
   it { should belong_to_vpc('vpc-dev') }
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
@@ -216,7 +216,7 @@ describe security_group('sg-dev-app-rds') do
 end
 
 
-describe rds('rds-dev-app') do
+describe rds('db-dev-app') do
   it { should exist }
   it { should be_available }
   its(:engine) { should eq 'mysql' }
@@ -224,9 +224,9 @@ describe rds('rds-dev-app') do
   its(:license_model) { should eq 'general-public-license' }
   its('resource.endpoint.port') { should eq 3306 }
   its(:publicly_accessible) { should eq false }
-  it { should have_security_group('sg-dev-app-rds') }
+  it { should have_security_group('sg-dev-app-db') }
   it { should have_security_group('sg-dev-all') }
-  it { should belong_to_db_subnet_group('dbsg-dev-app') }
+  it { should belong_to_db_subnet_group('dbsng-dev-app') }
   it { should belong_to_vpc('vpc-dev') }
   its(:multi_az) { should eq false }
   its(:db_instance_class) { should eq 'db.t2.micro' }
@@ -238,7 +238,7 @@ describe rds('rds-dev-app') do
   its(:backup_retention_period) { should eq 7 }
   its(:preferred_maintenance_window) { should eq 'mon:04:00-mon:06:00' }
   its(:iam_database_authentication_enabled) { should eq false }
-  it { should have_tag('Name').value('rds-dev-app') }
+  it { should have_tag('Name').value('db-dev-app') }
   it { should have_db_parameter_group('default.mysql5.7') }
   it { should have_option_group('default:mysql-5-7') }
 end
