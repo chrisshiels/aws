@@ -1,3 +1,3 @@
-output "security_group_id" {
+output "sg_id" {
   value = "${aws_security_group.securitygroup.id}"
 }

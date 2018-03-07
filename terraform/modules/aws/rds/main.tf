@@ -29,7 +29,7 @@ resource "aws_db_instance" "rds" {
   publicly_accessible = false
   vpc_security_group_ids = [
     "${var.db_security_group_ids}",
-    "${module.securitygroup.security_group_id}"
+    "${module.securitygroup.sg_id}"
   ]
   db_subnet_group_name = "${aws_db_subnet_group.rds.name}"
   option_group_name = "${var.db_option_group_name}"

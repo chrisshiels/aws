@@ -1,5 +1,5 @@
-output "security_group_id" {
-  value = "${module.securitygroup.security_group_id}"
+output "sg_id" {
+  value = "${module.securitygroup.sg_id}"
 }
 
 output "db_subnet_group_id" {
