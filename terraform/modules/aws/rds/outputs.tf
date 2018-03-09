@@ -2,38 +2,38 @@ output "sg_id" {
   value = "${module.securitygroup.sg_id}"
 }
 
-output "db_subnet_group_id" {
-  value = "${aws_db_subnet_group.rds.id}"
+output "dbsng_id" {
+  value = "${aws_db_subnet_group.dbsng.id}"
 }
 
-output "db_subnet_group_arn" {
-  value = "${aws_db_subnet_group.rds.arn}"
+output "dbsng_arn" {
+  value = "${aws_db_subnet_group.dbsng.arn}"
 }
 
-output "db_instance_address" {
-  value = "${aws_db_instance.rds.address}"
+output "db_address" {
+  value = "${aws_db_instance.db.address}"
 }
 
-output "db_instance_arn" {
-  value = "${aws_db_instance.rds.arn}"
+output "db_arn" {
+  value = "${aws_db_instance.db.arn}"
 }
 
-output "db_instance_endpoint" {
-  value = "${aws_db_instance.rds.endpoint}"
+output "db_endpoint" {
+  value = "${aws_db_instance.db.endpoint}"
 }
 
-output "db_instance_hosted_zone_id" {
-  value = "${aws_db_instance.rds.hosted_zone_id}"
+output "db_hosted_zone_id" {
+  value = "${aws_db_instance.db.hosted_zone_id}"
 }
 
-output "db_instance_id" {
-  value = "${aws_db_instance.rds.id}"
+output "db_id" {
+  value = "${aws_db_instance.db.id}"
 }
 
-output "db_instance_resource_id" {
-  value = "${aws_db_instance.rds.resource_id}"
+output "db_resource_id" {
+  value = "${aws_db_instance.db.resource_id}"
 }
 
-output "db_instance_status" {
-  value = "${aws_db_instance.rds.status}"
+output "db_status" {
+  value = "${aws_db_instance.db.status}"
 }

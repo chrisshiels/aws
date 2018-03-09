@@ -1,6 +1,6 @@
 module "securitygroup" {
   source = "../../../modules/aws/securitygroup"
-  name = "${var.name}-rds"
+  name = "${var.name}-db"
   vpc_id = "${var.vpc_id}"
   sg_allow_cidrs_len = "${var.sg_allow_cidrs_len}"
   sg_allow_cidrs = [ "${var.sg_allow_cidrs}" ]
@@ -9,19 +9,19 @@ module "securitygroup" {
 }
 
 
-resource "aws_db_subnet_group" "rds" {
-  name = "dbsg-${var.name}"
-  description = "dbsg-${var.name}"
-  subnet_ids = [ "${var.dbsg_subnet_ids}" ]
+resource "aws_db_subnet_group" "dbsng" {
+  name = "dbsng-${var.name}"
+  description = "dbsng-${var.name}"
+  subnet_ids = [ "${var.dbsng_subnet_ids}" ]
 
   tags {
-    Name = "dbsg-${var.name}"
+    Name = "dbsng-${var.name}"
   }
 }
 
 
-resource "aws_db_instance" "rds" {
-  identifier = "rds-${var.name}"
+resource "aws_db_instance" "db" {
+  identifier = "db-${var.name}"
   engine = "${var.db_engine}"
   engine_version = "${var.db_engine_version}"
   license_model = "${var.db_license_model}"
@@ -31,7 +31,7 @@ resource "aws_db_instance" "rds" {
     "${var.db_security_group_ids}",
     "${module.securitygroup.sg_id}"
   ]
-  db_subnet_group_name = "${aws_db_subnet_group.rds.name}"
+  db_subnet_group_name = "${aws_db_subnet_group.dbsng.name}"
   option_group_name = "${var.db_option_group_name}"
   parameter_group_name = "${var.db_parameter_group_name}"
   multi_az = "${var.db_multi_az}"
@@ -50,10 +50,10 @@ resource "aws_db_instance" "rds" {
   apply_immediately = "${var.db_apply_immediately}"
   copy_tags_to_snapshot = true
   skip_final_snapshot = "${var.db_skip_final_snapshot}"
-  final_snapshot_identifier = "rds-${var.name}-final"
+  final_snapshot_identifier = "db-${var.name}-final"
   iam_database_authentication_enabled = false
 
   tags {
-    Name = "rds-${var.name}"
+    Name = "db-${var.name}"
   }
 }

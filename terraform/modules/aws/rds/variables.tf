@@ -2,7 +2,7 @@ variable "name" {}
 
 variable "vpc_id" {}
 
-variable "dbsg_subnet_ids" {
+variable "dbsng_subnet_ids" {
   type = "list"
 }
 

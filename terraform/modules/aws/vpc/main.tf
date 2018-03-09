@@ -10,7 +10,7 @@ resource "aws_vpc" "vpc" {
 }
 
 
-resource "aws_subnet" "public" {
+resource "aws_subnet" "sn-public" {
   count = "${length(var.vpc_subnet_public_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
   availability_zone = "${element(var.vpc_availability_zones, count.index)}"
@@ -23,7 +23,7 @@ resource "aws_subnet" "public" {
 }
 
 
-resource "aws_subnet" "app" {
+resource "aws_subnet" "sn-app" {
   count = "${length(var.vpc_subnet_app_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
   availability_zone = "${element(var.vpc_availability_zones, count.index)}"
@@ -36,7 +36,7 @@ resource "aws_subnet" "app" {
 }
 
 
-resource "aws_subnet" "data" {
+resource "aws_subnet" "sn-data" {
   count = "${length(var.vpc_subnet_data_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
   availability_zone = "${element(var.vpc_availability_zones, count.index)}"
@@ -58,7 +58,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 
-resource "aws_eip" "nat" {
+resource "aws_eip" "eip" {
   count = "${length(var.vpc_subnet_public_cidrs)}"
   vpc = true
   depends_on = [ "aws_internet_gateway.igw" ]
@@ -71,8 +71,8 @@ resource "aws_eip" "nat" {
 
 resource "aws_nat_gateway" "nat" {
   count = "${length(var.vpc_subnet_public_cidrs)}"
-  allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
-  subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
+  allocation_id = "${element(aws_eip.eip.*.id, count.index)}"
+  subnet_id = "${element(aws_subnet.sn-public.*.id, count.index)}"
 
   tags {
     Name = "nat-${var.name}-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
@@ -82,7 +82,7 @@ resource "aws_nat_gateway" "nat" {
 }
 
 
-resource "aws_route_table" "public" {
+resource "aws_route_table" "rtb-public" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
@@ -92,7 +92,7 @@ resource "aws_route_table" "public" {
 
 
 resource "aws_route" "public-default" {
-  route_table_id = "${aws_route_table.public.id}"
+  route_table_id = "${aws_route_table.rtb-public.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id = "${aws_internet_gateway.igw.id}"
 }
@@ -100,12 +100,12 @@ resource "aws_route" "public-default" {
 
 resource "aws_route_table_association" "public-public" {
   count = "${length(var.vpc_subnet_public_cidrs)}"
-  subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
-  route_table_id = "${aws_route_table.public.id}"
+  subnet_id = "${element(aws_subnet.sn-public.*.id, count.index)}"
+  route_table_id = "${aws_route_table.rtb-public.id}"
 }
 
 
-resource "aws_route_table" "app" {
+resource "aws_route_table" "rtb-app" {
   count = "${length(var.vpc_subnet_app_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
 
@@ -117,7 +117,7 @@ resource "aws_route_table" "app" {
 
 resource "aws_route" "app-default" {
   count = "${length(var.vpc_subnet_app_cidrs)}"
-  route_table_id = "${element(aws_route_table.app.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.rtb-app.*.id, count.index)}"
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
 }
@@ -125,12 +125,12 @@ resource "aws_route" "app-default" {
 
 resource "aws_route_table_association" "app-app" {
   count = "${length(var.vpc_subnet_app_cidrs)}"
-  subnet_id = "${element(aws_subnet.app.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.app.*.id, count.index)}"
+  subnet_id = "${element(aws_subnet.sn-app.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.rtb-app.*.id, count.index)}"
 }
 
 
-resource "aws_route_table" "data" {
+resource "aws_route_table" "rtb-data" {
   count = "${length(var.vpc_subnet_data_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
 
@@ -142,7 +142,7 @@ resource "aws_route_table" "data" {
 
 resource "aws_route" "data-default" {
   count = "${length(var.vpc_subnet_data_cidrs)}"
-  route_table_id = "${element(aws_route_table.data.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.rtb-data.*.id, count.index)}"
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id = "${element(aws_nat_gateway.nat.*.id, count.index)}"
 }
@@ -150,6 +150,6 @@ resource "aws_route" "data-default" {
 
 resource "aws_route_table_association" "data-data" {
   count = "${length(var.vpc_subnet_data_cidrs)}"
-  subnet_id = "${element(aws_subnet.data.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.data.*.id, count.index)}"
+  subnet_id = "${element(aws_subnet.sn-data.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.rtb-data.*.id, count.index)}"
 }
