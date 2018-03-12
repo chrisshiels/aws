@@ -1,6 +1,6 @@
 module "vpc" {
   source = "../../../modules/aws/vpc"
-  name = "${var.env}"
+  name = "elbasgrds-${var.env}"
   vpc_cidr = "${var.vpc_cidr}"
   vpc_availability_zones = "${var.vpc_availability_zones}"
   vpc_subnet_public_cidrs = "${var.vpc_subnet_public_cidrs}"
@@ -11,7 +11,7 @@ module "vpc" {
 
 module "securitygroup-all" {
   source = "../../../modules/aws/securitygroup"
-  name = "${var.env}-all"
+  name = "elbasgrds-${var.env}-all"
   vpc_id = "${module.vpc.vpc_id}"
 }
 
@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "policy" {
 
 module "instanceprofile" {
   source = "../../../modules/aws/instanceprofile"
-  name = "${var.env}-instance"
+  name = "elbasgrds-${var.env}-instance"
   policy = "${data.aws_iam_policy_document.policy.json}"
 }
 
@@ -62,7 +62,7 @@ data "template_file" "user-data" {
 
 module "bastion" {
   source = "../../../modules/aws/instance"
-  name = "${var.env}-bastion"
+  name = "elbasgrds-${var.env}-bastion"
   vpc_id = "${module.vpc.vpc_id}"
   instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
   instance_internet_gateway_id = "${module.vpc.igw_id}"
@@ -85,7 +85,7 @@ module "bastion" {
 
 module "elbasg" {
   source = "../../../modules/aws/elbasg"
-  name = "${var.env}-app"
+  name = "elbasgrds-${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
   elb_internal = false
   elb_subnet_ids = "${module.vpc.sn_public_ids}"
@@ -120,7 +120,7 @@ module "elbasg" {
 
 module "rds" {
   source = "../../../modules/aws/rds"
-  name = "${var.env}-app"
+  name = "elbasgrds-${var.env}-app"
   vpc_id = "${module.vpc.vpc_id}"
   dbsng_subnet_ids = "${module.vpc.sn_data_ids}"
   db_engine = "mysql"

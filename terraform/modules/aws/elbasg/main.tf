@@ -45,7 +45,7 @@ resource "aws_elb" "elb" {
 
 module "securitygroup-asglc" {
   source = "../../../modules/aws/securitygroup"
-  name = "${var.name}"
+  name = "${var.name}-asglc"
   vpc_id = "${var.vpc_id}"
   sg_allow_cidrs_len = "${var.asglc_sg_allow_cidrs_len}"
   sg_allow_cidrs = [ "${var.asglc_sg_allow_cidrs}" ]
