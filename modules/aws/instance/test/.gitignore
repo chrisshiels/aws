@@ -1,0 +1,6 @@
+.rspec
+Rakefile
+spec/.gitignore
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
