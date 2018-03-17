@@ -1,5 +1,7 @@
 variable "name" {}
 
+variable "count" {}
+
 variable "vpc_id" {}
 
 variable "instance_subnet_id" {}

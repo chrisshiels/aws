@@ -10,6 +10,7 @@ module "securitygroup" {
 
 
 resource "aws_instance" "instance" {
+  count = "${var.count}"
   ami = "${var.instance_ami_id}"
   instance_type = "${var.instance_instance_type}"
   vpc_security_group_ids = [
@@ -30,11 +31,11 @@ resource "aws_instance" "instance" {
   }
 
   tags {
-    Name = "${var.name}"
+    Name = "${var.name}${count.index + 1}"
     TerraformDependsOn = "${var.instance_internet_gateway_id}"
   }
 
   volume_tags {
-    Name = "${var.name}"
+    Name = "${var.name}${count.index + 1}"
   }
 }
