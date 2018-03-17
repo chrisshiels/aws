@@ -63,6 +63,7 @@ data "template_file" "user-data" {
 module "bastion" {
   source = "../../../modules/aws/instance"
   name = "elbasgrds-${var.env}-bastion"
+  count = 1
   vpc_id = "${module.vpc.vpc_id}"
   instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
   instance_internet_gateway_id = "${module.vpc.igw_id}"

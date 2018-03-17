@@ -131,7 +131,7 @@ describe security_group('sg-elbasgrds-dev-bastion') do
 end
 
 
-describe ec2('elbasgrds-dev-bastion') do
+describe ec2('elbasgrds-dev-bastion1') do
   it { should exist }
   it { should be_running }
   its(:instance_type) { should eq 't2.micro' }
@@ -139,7 +139,7 @@ describe ec2('elbasgrds-dev-bastion') do
   it { should have_security_group('sg-elbasgrds-dev-all') }
   it { should belong_to_vpc('vpc-elbasgrds-dev') }
   it { should belong_to_subnet('sn-elbasgrds-dev-public-1a') }
-  it { should have_ebs('elbasgrds-dev-bastion') }
+  it { should have_ebs('elbasgrds-dev-bastion1') }
   its(:key_name) { should eq 'aws' }
   it { should have_iam_instance_profile('instanceprofile-elbasgrds-dev-instance') }
   its(:hypervisor) { should eq 'xen' }

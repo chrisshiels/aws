@@ -103,6 +103,29 @@ data "template_file" "user-data" {
 module "single" {
   source = "../../instance"
   name = "unittest-instance-single"
+  count = 1
+  vpc_id = "${module.vpc.vpc_id}"
+  instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
+  instance_internet_gateway_id = "${module.vpc.igw_id}"
+  instance_instance_profile_id = "${module.instanceprofile.instanceprofile_id}"
+  instance_ami_id = "${data.aws_ami.centos7.id}"
+  instance_user_data = "${data.template_file.user-data.rendered}"
+  instance_key_name = "${var.key_name}"
+  instance_instance_type = "${var.instance_instance_type}"
+  instance_associate_public_ip_address = true
+  instance_root_block_device_volume_size = 8
+  instance_security_group_ids = [
+    "${module.securitygroup-all.sg_id}"
+  ]
+  sg_allow_cidrs_len = 0
+  sg_allow_cidrs = []
+}
+
+
+module "multiple" {
+  source = "../../instance"
+  name = "unittest-instance-multiple"
+  count = 2
   vpc_id = "${module.vpc.vpc_id}"
   instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
   instance_internet_gateway_id = "${module.vpc.igw_id}"
