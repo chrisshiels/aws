@@ -22,8 +22,24 @@ output "eip_ids" {
   value = "${aws_eip.eip.*.id}"
 }
 
+output "eip_private_ips" {
+  value = "${aws_eip.eip.*.private_ip}"
+}
+
+output "eip_public_ips" {
+  value = "${aws_eip.eip.*.public_ip}"
+}
+
 output "nat_ids" {
   value = "${aws_nat_gateway.nat.*.id}"
+}
+
+output "nat_private_ips" {
+  value = "${aws_nat_gateway.nat.*.private_ip}"
+}
+
+output "nat_public_ips" {
+  value = "${aws_nat_gateway.nat.*.public_ip}"
 }
 
 output "rtb_public_id" {
