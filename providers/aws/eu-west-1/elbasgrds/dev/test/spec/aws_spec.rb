@@ -242,3 +242,11 @@ describe rds('db-elbasgrds-dev-app') do
   it { should have_db_parameter_group('default.mysql5.7') }
   it { should have_option_group('default:mysql-5-7') }
 end
+
+
+describe route53_hosted_zone('dev.elbasgrds.eu-west-1.internal.') do
+  it { should exist }
+  its(:resource_record_set_count) { should eq 5 }
+  its('config.comment') { should eq 'dev.elbasgrds.eu-west-1.internal' }
+  its('config.private_zone') { should eq true }
+end
