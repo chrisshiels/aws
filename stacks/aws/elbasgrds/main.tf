@@ -148,3 +148,27 @@ module "rds" {
     "tcp:3306:${module.elbasg.asglc_sg_id}"
   ]
 }
+
+
+resource "aws_route53_zone" "zone" {
+  name = "dev.elbasgrds.eu-west-1.internal"
+  vpc_id = "${module.vpc.vpc_id}"
+  force_destroy = false
+  comment = "dev.elbasgrds.eu-west-1.internal"
+
+  tags {
+    Name = "dev.elbasgrds.eu-west-1.internal"
+  }
+}
+
+
+module "route53record" {
+  source = "../../../modules/aws/route53record"
+  name = "dev.elbasgrds.eu-west-1.internal"
+  r53_zone_id = "${aws_route53_zone.zone.zone_id}"
+  r53_records = [
+    "bastion:60:CNAME:${module.bastion.instance_public_dns[0]}",
+    "elb:60:CNAME:${module.elbasg.elb_dns_name}",
+    "db:60:CNAME:${module.rds.db_endpoint}"
+  ]
+}
