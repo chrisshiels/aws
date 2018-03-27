@@ -1,5 +1,5 @@
 resource "aws_route53_record" "record" {
-  count = "${length(var.r53_records)}"
+  count = "${var.r53_records_len}"
   zone_id = "${var.r53_zone_id}"
   name =
     "${element(split(":", element(var.r53_records, count.index)),

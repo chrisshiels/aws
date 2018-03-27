@@ -166,6 +166,7 @@ module "route53record" {
   source = "../../../modules/aws/route53record"
   name = "${var.r53_domain}"
   r53_zone_id = "${aws_route53_zone.zone.zone_id}"
+  r53_records_len = 3
   r53_records = [
     "bastion:60:CNAME:${module.bastion.instance_public_dns[0]}",
     "elb:60:CNAME:${module.elbasg.elb_dns_name}",
