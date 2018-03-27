@@ -39,4 +39,5 @@ module "elbasgrds" {
   db_backup_window = "01:00-03:00"
   db_backup_retention_period = 7
   db_maintenance_window = "mon:04:00-mon:06:00"
+  r53_domain = "stage.elbasgrds.eu-west-1.internal"
 }

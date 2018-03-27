@@ -53,3 +53,5 @@ variable "db_backup_window" {}
 variable "db_backup_retention_period" {}
 
 variable "db_maintenance_window" {}
+
+variable "r53_domain" {}

@@ -151,20 +151,20 @@ module "rds" {
 
 
 resource "aws_route53_zone" "zone" {
-  name = "dev.elbasgrds.eu-west-1.internal"
+  name = "${var.r53_domain}"
   vpc_id = "${module.vpc.vpc_id}"
   force_destroy = false
-  comment = "dev.elbasgrds.eu-west-1.internal"
+  comment = "${var.r53_domain}"
 
   tags {
-    Name = "dev.elbasgrds.eu-west-1.internal"
+    Name = "${var.r53_domain}"
   }
 }
 
 
 module "route53record" {
   source = "../../../modules/aws/route53record"
-  name = "dev.elbasgrds.eu-west-1.internal"
+  name = "${var.r53_domain}"
   r53_zone_id = "${aws_route53_zone.zone.zone_id}"
   r53_records = [
     "bastion:60:CNAME:${module.bastion.instance_public_dns[0]}",
