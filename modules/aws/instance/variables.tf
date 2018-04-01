@@ -4,7 +4,9 @@ variable "count" {}
 
 variable "vpc_id" {}
 
-variable "instance_subnet_id" {}
+variable "instance_subnet_ids" {
+  type = "list"
+}
 
 variable "instance_internet_gateway_id" {}
 

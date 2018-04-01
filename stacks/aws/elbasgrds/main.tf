@@ -65,7 +65,7 @@ module "bastion" {
   name = "elbasgrds-${var.env}-bastion"
   count = 1
   vpc_id = "${module.vpc.vpc_id}"
-  instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
+  instance_subnet_ids = "${module.vpc.sn_public_ids}"
   instance_internet_gateway_id = "${module.vpc.igw_id}"
   instance_instance_profile_id = "${module.instanceprofile.instanceprofile_id}"
   instance_ami_id = "${data.aws_ami.centos7.id}"

@@ -59,7 +59,7 @@ describe ec2('unittest-instance-multiple2') do
   it { should have_security_group('sg-unittest-instance-multiple') }
   it { should have_security_group('sg-unittest-instance-all') }
   it { should belong_to_vpc('vpc-unittest-instance') }
-  it { should belong_to_subnet('sn-unittest-instance-public-1a') }
+  it { should belong_to_subnet('sn-unittest-instance-public-1b') }
   it { should have_ebs('unittest-instance-multiple2') }
   its(:key_name) { should eq 'aws' }
   it { should have_iam_instance_profile('instanceprofile-unittest-instance') }

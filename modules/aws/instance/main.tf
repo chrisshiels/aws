@@ -17,7 +17,7 @@ resource "aws_instance" "instance" {
     "${var.instance_security_group_ids}",
     "${module.securitygroup.sg_id}"
   ]
-  subnet_id = "${var.instance_subnet_id}"
+  subnet_id = "${element(var.instance_subnet_ids, count.index)}"
   associate_public_ip_address = "${var.instance_associate_public_ip_address}"
   key_name = "${var.instance_key_name}"
   monitoring = false

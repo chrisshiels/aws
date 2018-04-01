@@ -22,16 +22,16 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 variable "vpc_availability_zones" {
-  default = [ "eu-west-1a" ]
+  default = [ "eu-west-1a", "eu-west-1b" ]
 }
 variable "vpc_subnet_public_cidrs" {
-  default = [ "10.0.1.0/24" ]
+  default = [ "10.0.1.0/24", "10.0.2.0/24" ]
 }
 variable "vpc_subnet_app_cidrs" {
-  default = [ "10.0.2.0/24" ]
+  default = [ "10.0.4.0/24", "10.0.5.0/24" ]
 }
 variable "vpc_subnet_data_cidrs" {
-  default = [ "10.0.3.0/24" ]
+  default = [ "10.0.7.0/24", "10.0.8.0/24" ]
 }
 variable "instance_instance_type" {
   default = "t2.micro"
@@ -105,7 +105,7 @@ module "single" {
   name = "unittest-instance-single"
   count = 1
   vpc_id = "${module.vpc.vpc_id}"
-  instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
+  instance_subnet_ids = "${module.vpc.sn_public_ids}"
   instance_internet_gateway_id = "${module.vpc.igw_id}"
   instance_instance_profile_id = "${module.instanceprofile.instanceprofile_id}"
   instance_ami_id = "${data.aws_ami.centos7.id}"
@@ -127,7 +127,7 @@ module "multiple" {
   name = "unittest-instance-multiple"
   count = 2
   vpc_id = "${module.vpc.vpc_id}"
-  instance_subnet_id = "${element(module.vpc.sn_public_ids, 0)}"
+  instance_subnet_ids = "${module.vpc.sn_public_ids}"
   instance_internet_gateway_id = "${module.vpc.igw_id}"
   instance_instance_profile_id = "${module.instanceprofile.instanceprofile_id}"
   instance_ami_id = "${data.aws_ami.centos7.id}"
