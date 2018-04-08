@@ -1,17 +1,17 @@
 terraform {
-  required_version = "= 0.11.3"
+  required_version = ">= 0.11.3"
 }
 
 
 provider "aws" {
-  version = "1.8"
+  version = ">= 1.8"
 
   region = "us-east-1"
 }
 
 
 provider "template" {
-  version = "1.0"
+  version = ">= 1.0"
 }
 
 
