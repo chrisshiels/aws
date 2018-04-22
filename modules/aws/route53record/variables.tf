@@ -10,3 +10,8 @@ variable "r53_records" {
   type = "list"
   default = []
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+}

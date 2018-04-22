@@ -55,3 +55,8 @@ variable "db_backup_retention_period" {}
 variable "db_maintenance_window" {}
 
 variable "r53_domain" {}
+
+variable "tags" {
+  type = "map"
+  default = {}
+}

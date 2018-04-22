@@ -6,6 +6,7 @@ module "securitygroup" {
   sg_allow_cidrs = [ "${var.sg_allow_cidrs}" ]
   sg_allow_ids_len = "${var.sg_allow_ids_len}"
   sg_allow_ids = [ "${var.sg_allow_ids}" ]
+  tags = "${var.tags}"
 }
 
 
@@ -14,9 +15,8 @@ resource "aws_db_subnet_group" "dbsng" {
   description = "dbsng-${var.name}"
   subnet_ids = [ "${var.dbsng_subnet_ids}" ]
 
-  tags {
-    Name = "dbsng-${var.name}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "dbsng-${var.name}"))}"
 }
 
 
@@ -53,7 +53,6 @@ resource "aws_db_instance" "db" {
   final_snapshot_identifier = "db-${var.name}-final"
   iam_database_authentication_enabled = false
 
-  tags {
-    Name = "db-${var.name}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "db-${var.name}"))}"
 }

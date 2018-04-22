@@ -15,6 +15,8 @@ describe vpc('vpc-elbasgrds-dev') do
   it { should have_route_table('rtb-elbasgrds-dev-app-1b') }
   it { should have_route_table('rtb-elbasgrds-dev-data-1a') }
   it { should have_route_table('rtb-elbasgrds-dev-data-1b') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -27,6 +29,8 @@ end
     it { should be_available }
     it { should belong_to_vpc('vpc-elbasgrds-dev') }
     its(:cidr_block) { should eq cidr }
+    it { should have_tag('owner').value('Personname / Teamname') }
+    it { should have_tag('project').value('Projectname') }
   end
 end
 
@@ -40,6 +44,8 @@ end
     it { should be_available }
     it { should belong_to_vpc('vpc-elbasgrds-dev') }
     its(:cidr_block) { should eq cidr }
+    it { should have_tag('owner').value('Personname / Teamname') }
+    it { should have_tag('project').value('Projectname') }
   end
 end
 
@@ -53,6 +59,8 @@ end
     it { should be_available }
     it { should belong_to_vpc('vpc-elbasgrds-dev') }
     its(:cidr_block) { should eq cidr }
+    it { should have_tag('owner').value('Personname / Teamname') }
+    it { should have_tag('project').value('Projectname') }
   end
 end
 
@@ -60,6 +68,8 @@ end
 describe internet_gateway('igw-elbasgrds-dev') do
   it { should exist }
   it { should be_attached_to('vpc-elbasgrds-dev') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -70,6 +80,8 @@ describe route_table('rtb-elbasgrds-dev-public') do
   it { should have_subnet('sn-elbasgrds-dev-public-1a') }
   it { should have_subnet('sn-elbasgrds-dev-public-1b') }
   its('routes.last.gateway_id') { should match /^igw-/ }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -79,6 +91,8 @@ describe route_table('rtb-elbasgrds-dev-app-1a') do
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-elbasgrds-dev-app-1a') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -88,6 +102,8 @@ describe route_table('rtb-elbasgrds-dev-app-1b') do
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-elbasgrds-dev-app-1b') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -97,6 +113,8 @@ describe route_table('rtb-elbasgrds-dev-data-1a') do
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-elbasgrds-dev-data-1a') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -106,6 +124,8 @@ describe route_table('rtb-elbasgrds-dev-data-1b') do
   it { should have_route('10.0.0.0/16').target(gateway: 'local') }
   it { should have_subnet('sn-elbasgrds-dev-data-1b') }
   its('routes.last.nat_gateway_id') { should match /^nat-/ }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -128,6 +148,8 @@ describe security_group('sg-elbasgrds-dev-bastion') do
   it { should belong_to_vpc('vpc-elbasgrds-dev') }
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
   its(:inbound) { should be_opened(22).protocol('tcp').for('0.0.0.0/0') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -144,6 +166,8 @@ describe ec2('elbasgrds-dev-bastion1') do
   it { should have_iam_instance_profile('instanceprofile-elbasgrds-dev-instance') }
   its(:hypervisor) { should eq 'xen' }
   its(:virtualization_type) { should eq 'hvm' }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -152,6 +176,8 @@ describe security_group('sg-elbasgrds-dev-app-elb') do
   it { should belong_to_vpc('vpc-elbasgrds-dev') }
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
   its(:inbound) { should be_opened(80).protocol('tcp').for('0.0.0.0/0') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -171,6 +197,8 @@ describe elb('elb-elbasgrds-dev-app') do
   its(:health_check_unhealthy_threshold) { should eq 2 }
   its(:health_check_healthy_threshold) { should eq 2 }
   its(:health_check_timeout) { should eq 10 }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -181,6 +209,8 @@ describe security_group('sg-elbasgrds-dev-app-asglc') do
   its(:inbound) { should be_opened(22).protocol('tcp').for('sg-elbasgrds-dev-bastion') }
   its(:inbound) { should be_opened(80).protocol('tcp').for('sg-elbasgrds-dev-bastion') }
   its(:inbound) { should be_opened(80).protocol('tcp').for('sg-elbasgrds-dev-app-elb') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -205,6 +235,8 @@ describe autoscaling_group('asg-elbasgrds-dev-app') do
   its(:default_cooldown) { should eq 30 }
   its(:health_check_grace_period) { should eq 60 }
   its(:health_check_type) { should eq 'EC2' }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -213,6 +245,8 @@ describe security_group('sg-elbasgrds-dev-app-db') do
   it { should belong_to_vpc('vpc-elbasgrds-dev') }
   its(:outbound) { should be_opened.protocol('all').for('0.0.0.0/0') }
   its(:inbound) { should be_opened(3306).protocol('tcp').for('sg-elbasgrds-dev-app-asglc') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
 end
 
 
@@ -239,6 +273,8 @@ describe rds('db-elbasgrds-dev-app') do
   its(:preferred_maintenance_window) { should eq 'mon:04:00-mon:06:00' }
   its(:iam_database_authentication_enabled) { should eq false }
   it { should have_tag('Name').value('db-elbasgrds-dev-app') }
+  it { should have_tag('owner').value('Personname / Teamname') }
+  it { should have_tag('project').value('Projectname') }
   it { should have_db_parameter_group('default.mysql5.7') }
   it { should have_option_group('default:mysql-5-7') }
 end

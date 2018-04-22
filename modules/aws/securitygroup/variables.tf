@@ -19,3 +19,8 @@ variable "sg_allow_ids" {
   type = "list"
   default = []
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+}

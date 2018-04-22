@@ -4,9 +4,8 @@ resource "aws_vpc" "vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
 
-  tags {
-    Name = "vpc-${var.name}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "vpc-${var.name}"))}"
 }
 
 
@@ -17,9 +16,8 @@ resource "aws_subnet" "sn-public" {
   cidr_block = "${element(var.vpc_subnet_public_cidrs, count.index)}"
   map_public_ip_on_launch = true
 
-  tags {
-    Name = "sn-${var.name}-public-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "sn-${var.name}-public-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 }
 
 
@@ -30,9 +28,8 @@ resource "aws_subnet" "sn-app" {
   cidr_block = "${element(var.vpc_subnet_app_cidrs, count.index)}"
   map_public_ip_on_launch = false
 
-  tags {
-    Name = "sn-${var.name}-app-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "sn-${var.name}-app-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 }
 
 
@@ -43,18 +40,16 @@ resource "aws_subnet" "sn-data" {
   cidr_block = "${element(var.vpc_subnet_data_cidrs, count.index)}"
   map_public_ip_on_launch = false
 
-  tags {
-    Name = "sn-${var.name}-data-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "sn-${var.name}-data-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 }
 
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    Name = "igw-${var.name}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "igw-${var.name}"))}"
 }
 
 
@@ -63,9 +58,8 @@ resource "aws_eip" "eip" {
   vpc = true
   depends_on = [ "aws_internet_gateway.igw" ]
 
-  tags {
-    Name = "eip-${var.name}-natgw-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "eip-${var.name}-natgw-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 }
 
 
@@ -74,9 +68,8 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = "${element(aws_eip.eip.*.id, count.index)}"
   subnet_id = "${element(aws_subnet.sn-public.*.id, count.index)}"
 
-  tags {
-    Name = "nat-${var.name}-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "nat-${var.name}-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 
   depends_on = [ "aws_internet_gateway.igw" ]
 }
@@ -85,9 +78,8 @@ resource "aws_nat_gateway" "nat" {
 resource "aws_route_table" "rtb-public" {
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    Name = "rtb-${var.name}-public"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "rtb-${var.name}-public"))}"
 }
 
 
@@ -109,9 +101,8 @@ resource "aws_route_table" "rtb-app" {
   count = "${length(var.vpc_subnet_app_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    Name = "rtb-${var.name}-app-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "rtb-${var.name}-app-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 }
 
 
@@ -134,9 +125,8 @@ resource "aws_route_table" "rtb-data" {
   count = "${length(var.vpc_subnet_data_cidrs)}"
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    Name = "rtb-${var.name}-data-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "rtb-${var.name}-data-${substr(element(var.vpc_availability_zones, count.index), -2, -1)}"))}"
 }
 
 

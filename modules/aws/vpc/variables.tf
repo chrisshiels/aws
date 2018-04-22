@@ -17,3 +17,8 @@ variable "vpc_subnet_app_cidrs" {
 variable "vpc_subnet_data_cidrs" {
   type = "list"
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+}

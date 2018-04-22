@@ -6,6 +6,7 @@ module "vpc" {
   vpc_subnet_public_cidrs = "${var.vpc_subnet_public_cidrs}"
   vpc_subnet_app_cidrs = "${var.vpc_subnet_app_cidrs}"
   vpc_subnet_data_cidrs = "${var.vpc_subnet_data_cidrs}"
+  tags = "${var.tags}"
 }
 
 
@@ -13,6 +14,7 @@ module "securitygroup-all" {
   source = "../../../modules/aws/securitygroup"
   name = "elbasgrds-${var.env}-all"
   vpc_id = "${module.vpc.vpc_id}"
+  tags = "${var.tags}"
 }
 
 
@@ -49,6 +51,7 @@ module "instanceprofile" {
   source = "../../../modules/aws/instanceprofile"
   name = "elbasgrds-${var.env}-instance"
   policy = "${data.aws_iam_policy_document.policy.json}"
+  tags = "${var.tags}"
 }
 
 
@@ -81,6 +84,7 @@ module "bastion" {
   sg_allow_cidrs = [
     "${formatlist("tcp:22:%s", var.bastion_ssh_cidrs)}"
   ]
+  tags = "${var.tags}"
 }
 
 
@@ -116,6 +120,7 @@ module "elbasg" {
   asg_min_size = "${var.asg_min_size}"
   asg_max_size = "${var.asg_max_size}"
   asg_desired_capacity = "${var.asg_desired_capacity}"
+  tags = "${var.tags}"
 }
 
 
@@ -147,6 +152,7 @@ module "rds" {
   sg_allow_ids = [
     "tcp:3306:${module.elbasg.asglc_sg_id}"
   ]
+  tags = "${var.tags}"
 }
 
 
@@ -156,9 +162,8 @@ resource "aws_route53_zone" "zone" {
   force_destroy = false
   comment = "${var.r53_domain}"
 
-  tags {
-    Name = "${var.r53_domain}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", var.r53_domain))}"
 }
 
 
@@ -172,4 +177,5 @@ module "route53record" {
     "elb:60:CNAME:${module.elbasg.elb_dns_name}",
     "db:60:CNAME:${module.rds.db_endpoint}"
   ]
+  tags = "${var.tags}"
 }

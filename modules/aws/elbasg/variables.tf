@@ -87,3 +87,8 @@ variable "asg_min_size" {}
 variable "asg_max_size" {}
 
 variable "asg_desired_capacity" {}
+
+variable "tags" {
+  type = "map"
+  default = {}
+}
