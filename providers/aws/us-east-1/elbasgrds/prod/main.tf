@@ -10,6 +10,11 @@ provider "aws" {
 }
 
 
+provider "null" {
+  version = ">= 1.0"
+}
+
+
 provider "template" {
   version = ">= 1.0"
 }
@@ -40,4 +45,8 @@ module "elbasgrds" {
   db_backup_retention_period = 7
   db_maintenance_window = "mon:04:00-mon:06:00"
   r53_domain = "prod.elbasgrds.us-east-1.internal"
+  tags = {
+    owner = "Personname / Teamname"
+    project = "Projectname"
+  }
 }

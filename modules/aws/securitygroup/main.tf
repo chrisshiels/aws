@@ -3,9 +3,8 @@ resource "aws_security_group" "securitygroup" {
   description = "sg-${var.name}"
   vpc_id = "${var.vpc_id}"
 
-  tags {
-    Name = "sg-${var.name}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "sg-${var.name}"))}"
 }
 
 

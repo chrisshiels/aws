@@ -6,6 +6,7 @@ module "securitygroup" {
   sg_allow_cidrs = "${var.sg_allow_cidrs}"
   sg_allow_ids_len = "${var.sg_allow_ids_len}"
   sg_allow_ids = "${var.sg_allow_ids}"
+  tags = "${var.tags}"
 }
 
 
@@ -30,12 +31,11 @@ resource "aws_instance" "instance" {
     delete_on_termination = true
   }
 
-  tags {
-    Name = "${var.name}${count.index + 1}"
-    TerraformDependsOn = "${var.instance_internet_gateway_id}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "${var.name}${count.index + 1}"),
+                  map("TerraformDependsOn", var.instance_internet_gateway_id))}"
 
-  volume_tags {
-    Name = "${var.name}${count.index + 1}"
-  }
+  volume_tags = "${merge(var.tags,
+                         map("Name", "${var.name}${count.index + 1}"))}"
+
 }

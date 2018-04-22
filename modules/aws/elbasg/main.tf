@@ -6,6 +6,7 @@ module "securitygroup-elb" {
   sg_allow_cidrs = [ "${var.elb_sg_allow_cidrs}" ]
   sg_allow_ids_len = "${var.elb_sg_allow_ids_len}"
   sg_allow_ids = [ "${var.elb_sg_allow_ids}" ]
+  tags = "${var.tags}"
 }
 
 
@@ -37,9 +38,8 @@ resource "aws_elb" "elb" {
     timeout = 10
   }
 
-  tags {
-    Name = "elb-${var.name}"
-  }
+  tags = "${merge(var.tags,
+                  map("Name", "elb-${var.name}"))}"
 }
 
 
@@ -54,6 +54,20 @@ module "securitygroup-asglc" {
     "${var.asglc_sg_allow_ids}",
     "tcp:${var.elb_server_port}:${module.securitygroup-elb.sg_id}"
   ]
+  tags = "${var.tags}"
+}
+
+
+# See:
+# https://github.com/hashicorp/terraform/issues/16980#issuecomment-353874594
+data "null_data_source" "tags" {
+  count = "${length(keys(var.tags))}"
+
+  inputs = {
+    key = "${element(keys(var.tags), count.index)}"
+    value = "${element(values(var.tags), count.index)}"
+    propagate_at_launch = true
+  }
 }
 
 
@@ -92,15 +106,13 @@ resource "aws_autoscaling_group" "asg" {
   health_check_type = "EC2"
   force_delete = false
 
-  tag {
-    key = "Name"
-    value = "asg-${var.name}"
-    propagate_at_launch = true
-  }
-
-  tag {
-    key = "TerraformDependsOn"
-    value = "${join(",", var.asg_nat_gateway_ids)}"
-    propagate_at_launch = true
-  }
+  tags = [
+    "${concat(data.null_data_source.tags.*.outputs,
+              list(map("key", "Name",
+                       "value", "asg-${var.name}",
+                       "propagate_at_launch", true),
+                   map("key", "TerraformDependsOn",
+                       "value", "${join(",", var.asg_nat_gateway_ids)}",
+                       "propagate_at_launch", true)))}"
+  ]
 }
